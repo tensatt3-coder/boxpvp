@@ -1,108 +1,156 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BoxPVP Sunucusu</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    function copyIP() {
-      const ip = document.getElementById("server-ip").innerText;
-      navigator.clipboard.writeText(ip);
-      const btn = document.getElementById("copy-btn");
-      btn.innerText = "Kopyalandı!";
-      setTimeout(() => btn.innerText = "IP Kopyala", 2000);
-    }
-
-    // Sahte oyuncu sayısı animasyonu (istersen gerçek API bağlarız)
-    let count = 0;
-    function animatePlayers() {
-      const target = 87; // örnek sayı
-      const el = document.getElementById("player-count");
-      const interval = setInterval(() => {
-        if (count >= target) clearInterval(interval);
-        else {
-          count++;
-          el.innerText = count;
-        }
-      }, 20);
-    }
-    window.onload = animatePlayers;
-  </script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NovarynMC BoxPVP</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Poppins,sans-serif}
+body{background:#0b1220;color:#fff}
+header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:20px 50px;
+background:#111a2f;
+}
+.logo{font-size:24px;font-weight:800;color:#ff3b3b}
+nav a{
+color:#fff;
+text-decoration:none;
+margin-left:20px;
+font-weight:600;
+}
+.hero{
+text-align:center;
+padding:100px 20px;
+}
+.hero h1{
+font-size:48px;
+margin-bottom:20px;
+}
+.hero p{
+opacity:.8;
+margin-bottom:30px;
+}
+.ip-box{
+background:#1a233a;
+display:inline-block;
+padding:15px 25px;
+border-radius:12px;
+margin-bottom:15px;
+}
+button{
+background:#ff3b3b;
+border:none;
+padding:12px 25px;
+border-radius:10px;
+color:#fff;
+font-weight:600;
+cursor:pointer;
+}
+button:hover{opacity:.8}
+.section{
+padding:80px 20px;
+text-align:center;
+}
+.cards{
+display:flex;
+justify-content:center;
+flex-wrap:wrap;
+gap:20px;
+margin-top:40px;
+}
+.card{
+background:#1a233a;
+padding:30px;
+border-radius:15px;
+width:250px;
+}
+.card h3{margin-bottom:10px}
+.card p{opacity:.7;margin-bottom:15px}
+footer{
+text-align:center;
+padding:30px;
+background:#111a2f;
+margin-top:50px;
+opacity:.6;
+}
+</style>
 </head>
-<body class="bg-gray-950 text-white scroll-smooth">
+<body>
 
-  <header class="bg-gray-900 shadow-lg sticky top-0 z-50">
-    <div class="max-w-6xl mx-auto px-4 py-6 flex justify-between items-center">
-      <h1 class="text-3xl font-bold text-red-500">BOXPVP</h1>
-      <div class="flex gap-4">
-        <a href="#shop" class="hover:text-red-400 transition">Mağaza</a>
-        <a href="#odeme" class="hover:text-red-400 transition">Ödeme</a>
-      </div>
-    </div>
-  </header>
+<header>
+<div class="logo">NOVARYNMC</div>
+<nav>
+<a href="#magaza">Mağaza</a>
+<a href="#discord">Discord</a>
+</nav>
+</header>
 
-  <section class="text-center py-24 px-4">
-    <h2 class="text-5xl font-extrabold mb-6">Türkiye'nin En Güçlü BoxPVP Sunucusu</h2>
-    <p class="text-gray-400 mb-8">Savaşa katıl, kasanı aç, zirveye çık!</p>
-    
-    <div class="bg-gray-800 inline-block px-6 py-4 rounded-2xl text-xl font-mono mb-4">
-      IP: <span id="server-ip" class="text-red-500">SUNUCU-IP-BURAYA</span>
-    </div>
-    
-    <div class="mb-6">
-      <button onclick="copyIP()" id="copy-btn" class="bg-red-600 hover:bg-red-700 px-6 py-3 rounded-2xl transition">IP Kopyala</button>
-    </div>
+<section class="hero">
+<h1>Türkiye'nin En Güçlü BoxPVP Sunucusu</h1>
+<p>Savaşa katıl, kasanı aç, zirveye çık!</p>
 
-    <div class="text-gray-400">
-      Aktif Oyuncu: <span id="player-count" class="text-white font-bold">0</span>
-    </div>
-  </section>
+<div class="ip-box">
+IP: <span id="serverIP">NovarynMC.aternos.me:12212</span>
+</div>
+<br>
+<button onclick="copyIP()">IP Kopyala</button>
 
-  <section id="shop" class="max-w-6xl mx-auto px-4 py-20">
-    <h3 class="text-4xl font-bold text-center mb-12">Rütbeler</h3>
+<p style="margin-top:20px;">Aktif Oyuncu: <span id="playerCount">Yükleniyor...</span></p>
+</section>
 
-    <div class="grid md:grid-cols-3 gap-8">
-      <div class="bg-gray-900 p-8 rounded-2xl shadow-xl hover:scale-105 transition">
-        <h4 class="text-2xl font-bold mb-4 text-yellow-400">VIP</h4>
-        <p class="text-gray-400 mb-4">• Özel prefix
-• 1 kasa anahtarı
-• Günlük ekstra ödül</p>
-        <p class="text-3xl font-bold mb-4">50₺</p>
-      </div>
+<section id="magaza" class="section">
+<h2>Rütbeler</h2>
+<div class="cards">
+<div class="card">
+<h3>VIP</h3>
+<p>Özel kit ve prefix</p>
+<button>Satın Al</button>
+</div>
+<div class="card">
+<h3>MVP</h3>
+<p>Daha güçlü kit + özel avantajlar</p>
+<button>Satın Al</button>
+</div>
+<div class="card">
+<h3>LEGEND</h3>
+<p>En güçlü rank + tüm avantajlar</p>
+<button>Satın Al</button>
+</div>
+</div>
+</section>
 
-      <div class="bg-gray-900 p-8 rounded-2xl shadow-xl border-2 border-red-600 hover:scale-105 transition">
-        <h4 class="text-2xl font-bold mb-4 text-red-500">ELITE</h4>
-        <p class="text-gray-400 mb-4">• Elite prefix
-• 3 kasa anahtarı
-• Özel kit</p>
-        <p class="text-3xl font-bold mb-4">100₺</p>
-      </div>
+<section id="discord" class="section">
+<h2>Discord Sunucumuz</h2>
+<p>Topluluğumuza katıl!</p>
+<button onclick="window.location.href='https://discord.gg/'">Discord'a Katıl</button>
+</section>
 
-      <div class="bg-gray-900 p-8 rounded-2xl shadow-xl hover:scale-105 transition">
-        <h4 class="text-2xl font-bold mb-4 text-purple-400">LEGEND</h4>
-        <p class="text-gray-400 mb-4">• Legend prefix
-• 5 kasa anahtarı
-• Kozmetik avantaj</p>
-        <p class="text-3xl font-bold mb-4">200₺</p>
-      </div>
-    </div>
-  </section>
+<footer>
+© 2026 NovarynMC - Tüm Hakları Saklıdır.
+</footer>
 
-  <section id="odeme" class="bg-gray-900 py-20 px-4 text-center">
-    <h3 class="text-3xl font-bold mb-6">Ödeme Bilgisi</h3>
-    <div class="bg-gray-800 inline-block px-8 py-6 rounded-2xl font-mono text-lg">
-      IBAN: TR00 0000 0000 0000 0000 0000 00
-    </div>
-    <p class="text-gray-400 mt-4">Açıklamaya oyuncu adınızı yazın ve Discord üzerinden destek açın.</p>
-    <div class="mt-6">
-      <a href="#" class="bg-indigo-600 hover:bg-indigo-700 px-6 py-3 rounded-2xl transition">Discord'a Katıl</a>
-    </div>
-  </section>
+<script>
+function copyIP(){
+const ip=document.getElementById("serverIP").innerText;
+navigator.clipboard.writeText(ip);
+alert("IP kopyalandı!");
+}
 
-  <footer class="bg-gray-950 text-center py-6 text-gray-500">
-    © 2026 BoxPVP Sunucusu - Tüm hakları saklıdır.
-  </footer>
+fetch("https://api.mcsrvstat.us/2/NovarynMC.aternos.me:12212")
+.then(res=>res.json())
+.then(data=>{
+if(data.players){
+document.getElementById("playerCount").innerText=data.players.online;
+}else{
+document.getElementById("playerCount").innerText="0";
+}
+})
+.catch(()=>document.getElementById("playerCount").innerText="0");
+</script>
 
 </body>
 </html>
