@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BoxPVP Sunucusu</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    function copyIP() {
+      const ip = document.getElementById("server-ip").innerText;
+      navigator.clipboard.writeText(ip);
+      const btn = document.getElementById("copy-btn");
+      btn.innerText = "Kopyalandı!";
+      setTimeout(() => btn.innerText = "IP Kopyala", 2000);
+    }
+
+    // Sahte oyuncu sayısı animasyonu (istersen gerçek API bağlarız)
+    let count = 0;
+    function animatePlayers() {
+      const target = 87; // örnek sayı
+      const el = document.getElementById("player-count");
+      const interval = setInterval(() => {
+        if (count >= target) clearInterval(interval);
+        else {
+          count++;
+          el.innerText = count;
+        }
+      }, 20);
+    }
+    window.onload = animatePlayers;
+  </script>
+</head>
+<body class="bg-gray-950 text-white scroll-smooth">
+
+  <header class="bg-gray-900 shadow-lg sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-4 py-6 flex justify-between items-center">
+      <h1 class="text-3xl font-bold text-red-500">BOXPVP</h1>
+      <div class="flex gap-4">
+        <a href="#shop" class="hover:text-red-400 transition">Mağaza</a>
+        <a href="#odeme" class="hover:text-red-400 transition">Ödeme</a>
+      </div>
+    </div>
+  </header>
+
+  <section class="text-center py-24 px-4">
+    <h2 class="text-5xl font-extrabold mb-6">Türkiye'nin En Güçlü BoxPVP Sunucusu</h2>
+    <p class="text-gray-400 mb-8">Savaşa katıl, kasanı aç, zirveye çık!</p>
+    
+    <div class="bg-gray-800 inline-block px-6 py-4 rounded-2xl text-xl font-mono mb-4">
+      IP: <span id="server-ip" class="text-red-500">SUNUCU-IP-BURAYA</span>
+    </div>
+    
+    <div class="mb-6">
+      <button onclick="copyIP()" id="copy-btn" class="bg-red-600 hover:bg-red-700 px-6 py-3 rounded-2xl transition">IP Kopyala</button>
+    </div>
+
+    <div class="text-gray-400">
+      Aktif Oyuncu: <span id="player-count" class="text-white font-bold">0</span>
+    </div>
+  </section>
+
+  <section id="shop" class="max-w-6xl mx-auto px-4 py-20">
+    <h3 class="text-4xl font-bold text-center mb-12">Rütbeler</h3>
+
+    <div class="grid md:grid-cols-3 gap-8">
+      <div class="bg-gray-900 p-8 rounded-2xl shadow-xl hover:scale-105 transition">
+        <h4 class="text-2xl font-bold mb-4 text-yellow-400">VIP</h4>
+        <p class="text-gray-400 mb-4">• Özel prefix
+• 1 kasa anahtarı
+• Günlük ekstra ödül</p>
+        <p class="text-3xl font-bold mb-4">50₺</p>
+      </div>
+
+      <div class="bg-gray-900 p-8 rounded-2xl shadow-xl border-2 border-red-600 hover:scale-105 transition">
+        <h4 class="text-2xl font-bold mb-4 text-red-500">ELITE</h4>
+        <p class="text-gray-400 mb-4">• Elite prefix
+• 3 kasa anahtarı
+• Özel kit</p>
+        <p class="text-3xl font-bold mb-4">100₺</p>
+      </div>
+
+      <div class="bg-gray-900 p-8 rounded-2xl shadow-xl hover:scale-105 transition">
+        <h4 class="text-2xl font-bold mb-4 text-purple-400">LEGEND</h4>
+        <p class="text-gray-400 mb-4">• Legend prefix
+• 5 kasa anahtarı
+• Kozmetik avantaj</p>
+        <p class="text-3xl font-bold mb-4">200₺</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="odeme" class="bg-gray-900 py-20 px-4 text-center">
+    <h3 class="text-3xl font-bold mb-6">Ödeme Bilgisi</h3>
+    <div class="bg-gray-800 inline-block px-8 py-6 rounded-2xl font-mono text-lg">
+      IBAN: TR00 0000 0000 0000 0000 0000 00
+    </div>
+    <p class="text-gray-400 mt-4">Açıklamaya oyuncu adınızı yazın ve Discord üzerinden destek açın.</p>
+    <div class="mt-6">
+      <a href="#" class="bg-indigo-600 hover:bg-indigo-700 px-6 py-3 rounded-2xl transition">Discord'a Katıl</a>
+    </div>
+  </section>
+
+  <footer class="bg-gray-950 text-center py-6 text-gray-500">
+    © 2026 BoxPVP Sunucusu - Tüm hakları saklıdır.
+  </footer>
+
+</body>
+</html>
