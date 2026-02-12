@@ -3,162 +3,240 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NovarynMC | Resmi Sunucu</title>
+<title>NovarynMC | Ultimate</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
 
 <style>
+*{margin:0;padding:0;box-sizing:border-box}
+
 body{
-    margin:0;
-    font-family: 'Segoe UI', sans-serif;
-    background: radial-gradient(circle at top,#1a1a2e,#0f0f1a);
-    color:white;
-    overflow-x:hidden;
+font-family:'Orbitron',sans-serif;
+background:#0a0a14;
+color:white;
+overflow-x:hidden;
 }
 
+/* PARTICLE CANVAS */
+#particles{
+position:fixed;
+width:100%;
+height:100%;
+z-index:-1;
+}
+
+/* NAV */
 nav{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    padding:20px 50px;
-    background:rgba(0,0,0,0.6);
+display:flex;
+justify-content:space-between;
+padding:25px 60px;
+background:rgba(0,0,0,0.6);
+backdrop-filter:blur(10px);
 }
 
 .logo{
-    font-size:24px;
-    font-weight:bold;
-    color:#00f7ff;
+font-size:24px;
+color:#00f7ff;
+font-weight:bold;
 }
 
-nav button{
-    padding:10px 20px;
-    background:#6a00ff;
-    border:none;
-    border-radius:8px;
-    color:white;
-    cursor:pointer;
-}
-
+/* HERO */
 .hero{
-    text-align:center;
-    padding:120px 20px;
+text-align:center;
+padding:140px 20px;
 }
 
 .hero h1{
-    font-size:55px;
-    background:linear-gradient(90deg,#00f7ff,#a855f7);
-    -webkit-background-clip:text;
-    -webkit-text-fill-color:transparent;
+font-size:60px;
+background:linear-gradient(90deg,#00f7ff,#a855f7);
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
 }
 
 .hero p{
-    font-size:20px;
-    opacity:0.8;
+opacity:.8;
+margin-top:15px;
 }
 
+/* IP BOX */
 .ip-box{
-    margin-top:30px;
-    background:#111;
-    padding:20px;
-    display:inline-block;
-    border-radius:15px;
-    cursor:pointer;
-    transition:0.3s;
+margin-top:40px;
+display:inline-block;
+padding:20px 40px;
+background:rgba(255,255,255,0.05);
+border:1px solid rgba(255,255,255,0.1);
+border-radius:20px;
+cursor:pointer;
+transition:.3s;
 }
 
 .ip-box:hover{
-    transform:scale(1.05);
+transform:scale(1.07);
+box-shadow:0 0 25px #6a00ff;
 }
 
-.stats{
-    margin-top:20px;
-    font-size:18px;
+.status{
+margin-top:20px;
+font-size:18px;
 }
 
+.online{color:#00ff88}
+.offline{color:#ff3c3c}
+
+/* RANK SECTION */
 .section{
-    padding:80px 20px;
-    text-align:center;
+padding:100px 20px;
+text-align:center;
+}
+
+.cards{
+display:flex;
+justify-content:center;
+flex-wrap:wrap;
+gap:30px;
+margin-top:40px;
 }
 
 .card{
-    background:#1c1c2b;
-    display:inline-block;
-    padding:25px;
-    margin:15px;
-    border-radius:15px;
-    width:250px;
-    transition:0.3s;
+background:rgba(255,255,255,0.05);
+padding:30px;
+border-radius:20px;
+width:260px;
+backdrop-filter:blur(10px);
+transition:.3s;
+border:1px solid rgba(255,255,255,0.1);
 }
 
 .card:hover{
-    transform:translateY(-10px);
+transform:translateY(-15px);
+box-shadow:0 0 30px #00f7ff;
+}
+
+.buy{
+margin-top:15px;
+padding:10px 20px;
+border:none;
+border-radius:10px;
+background:#6a00ff;
+color:white;
+cursor:pointer;
+transition:.3s;
+}
+
+.buy:hover{
+background:#00f7ff;
+color:black;
 }
 </style>
 </head>
 <body>
 
+<canvas id="particles"></canvas>
+
 <nav>
 <div class="logo">NovarynMC</div>
-<button onclick="scrollToRanks()">Rank Satın Al</button>
 </nav>
 
 <div class="hero">
-<h1>Türkiye'nin Yeni Nesil Minecraft Sunucusu</h1>
-<p>Survival • PvP • Ekonomi • Etkinlikler</p>
+<h1>Yeni Nesil Minecraft Deneyimi</h1>
+<p>Survival • PvP • Ekonomi • Etkinlik</p>
 
 <div class="ip-box" onclick="copyIP()">
-IP: <b id="ip">NovarynMC.aternos.me:12212</b><br>
-(Tıklayınca kopyalanır)
+IP: <b id="ip">NovarynMC.aternos.me:12212</b>
 </div>
 
-<div class="stats">
-Online Oyuncu: <b id="playerCount">Yükleniyor...</b>
+<div class="status">
+Durum: <span id="serverStatus">Kontrol ediliyor...</span><br>
+Oyuncu: <span id="playerCount">Yükleniyor...</span>
 </div>
 </div>
 
-<div class="section" id="ranks">
+<div class="section">
 <h2>💎 VIP Ranklar</h2>
+<div class="cards">
 
 <div class="card">
 <h3>VIP</h3>
 <p>Fly + Kit</p>
 <p><b>50₺</b></p>
+<button class="buy">Satın Al</button>
 </div>
 
 <div class="card">
 <h3>VIP+</h3>
-<p>2x Para + Özel Prefix</p>
+<p>2x Para + Prefix</p>
 <p><b>100₺</b></p>
+<button class="buy">Satın Al</button>
 </div>
 
 <div class="card">
 <h3>MVP</h3>
-<p>Tüm Yetkiler + Efektler</p>
+<p>Tüm Yetkiler</p>
 <p><b>200₺</b></p>
+<button class="buy">Satın Al</button>
 </div>
 
+</div>
 </div>
 
 <script>
 function copyIP(){
-    let ip=document.getElementById("ip").innerText;
-    navigator.clipboard.writeText(ip);
-    alert("IP kopyalandı!");
+navigator.clipboard.writeText(document.getElementById("ip").innerText);
+alert("IP kopyalandı!");
 }
 
-function scrollToRanks(){
-    document.getElementById("ranks").scrollIntoView({behavior:"smooth"});
-}
-
-/* CANLI OYUNCU SAYISI */
+/* SERVER STATUS AUTO REFRESH */
+function checkServer(){
 fetch("https://api.mcsrvstat.us/2/NovarynMC.aternos.me:12212")
-.then(response=>response.json())
+.then(res=>res.json())
 .then(data=>{
-    if(data.players){
-        document.getElementById("playerCount").innerText=
-        data.players.online + " / " + data.players.max;
-    }else{
-        document.getElementById("playerCount").innerText="Sunucu Kapalı";
-    }
+if(data.online){
+document.getElementById("serverStatus").innerHTML='<span class="online">🟢 Online</span>';
+document.getElementById("playerCount").innerText=data.players.online+" / "+data.players.max;
+}else{
+document.getElementById("serverStatus").innerHTML='<span class="offline">🔴 Offline</span>';
+document.getElementById("playerCount").innerText="0 / 0";
+}
 });
+}
+checkServer();
+setInterval(checkServer,30000);
+
+/* SIMPLE PARTICLE EFFECT */
+const canvas=document.getElementById("particles");
+const ctx=canvas.getContext("2d");
+canvas.width=window.innerWidth;
+canvas.height=window.innerHeight;
+
+let particles=[];
+for(let i=0;i<80;i++){
+particles.push({
+x:Math.random()*canvas.width,
+y:Math.random()*canvas.height,
+r:Math.random()*2,
+d:Math.random()*1
+});
+}
+
+function draw(){
+ctx.clearRect(0,0,canvas.width,canvas.height);
+ctx.fillStyle="rgba(0,247,255,0.6)";
+particles.forEach(p=>{
+ctx.beginPath();
+ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+ctx.fill();
+});
+update();
+}
+
+function update(){
+particles.forEach(p=>{
+p.y+=p.d;
+if(p.y>canvas.height){p.y=0}
+});
+}
+
+setInterval(draw,33);
 </script>
 
 </body>
