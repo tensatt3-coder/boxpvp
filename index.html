@@ -153,4 +153,183 @@ document.getElementById("playerCount").innerText="0";
 </script>
 
 </body>
+</html><!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NovarynMC | Resmi Site</title>
+
+<style>
+body{
+    margin:0;
+    font-family:Arial, sans-serif;
+    background:#0f0f0f;
+    color:white;
+    text-align:center;
+}
+
+nav{
+    background:#111;
+    padding:15px;
+}
+
+nav button{
+    margin:5px;
+    padding:10px 20px;
+    background:#6a00ff;
+    border:none;
+    color:white;
+    cursor:pointer;
+    border-radius:8px;
+}
+
+nav button:hover{
+    background:#4b00b3;
+}
+
+.section{
+    display:none;
+    padding:50px;
+}
+
+.active{
+    display:block;
+}
+
+.card{
+    background:#1a1a1a;
+    display:inline-block;
+    padding:25px;
+    margin:15px;
+    border-radius:15px;
+    width:250px;
+}
+
+.card h2{
+    color:#a855f7;
+}
+
+.buy-btn{
+    background:#00ff88;
+    border:none;
+    padding:10px 20px;
+    border-radius:8px;
+    cursor:pointer;
+}
+
+.buy-btn:hover{
+    background:#00cc6a;
+}
+
+input{
+    padding:10px;
+    margin:5px;
+    border-radius:8px;
+    border:none;
+}
+
+.ip-box{
+    margin-top:20px;
+    font-size:20px;
+    background:#1a1a1a;
+    padding:15px;
+    border-radius:10px;
+    cursor:pointer;
+}
+</style>
+</head>
+<body>
+
+<nav>
+<button onclick="showSection('home')">Ana Sayfa</button>
+<button onclick="showSection('ranks')">Rank Satın Al</button>
+<button onclick="showSection('login')">Login</button>
+</nav>
+
+<div id="home" class="section active">
+<h1>🔥 NovarynMC 🔥</h1>
+<p>Türkiye'nin en güçlü Minecraft sunucusu</p>
+
+<div class="ip-box" onclick="copyIP()">
+IP: <b id="ip">NovarynMC.aternos.me:12212</b><br>
+(Tıklayınca kopyalanır)
+</div>
+
+<p id="copyMessage"></p>
+</div>
+
+<div id="ranks" class="section">
+<h1>💎 Rank Satış</h1>
+
+<div class="card">
+<h2>VIP</h2>
+<p>Fly + Kit + Özel Prefix</p>
+<p><b>50₺</b></p>
+<button class="buy-btn" onclick="buyRank('VIP')">Satın Al</button>
+</div>
+
+<div class="card">
+<h2>VIP+</h2>
+<p>Daha güçlü kit + 2x Para</p>
+<p><b>100₺</b></p>
+<button class="buy-btn" onclick="buyRank('VIP+')">Satın Al</button>
+</div>
+
+<div class="card">
+<h2>MVP</h2>
+<p>Full yetki + Özel efektler</p>
+<p><b>200₺</b></p>
+<button class="buy-btn" onclick="buyRank('MVP')">Satın Al</button>
+</div>
+
+<p id="buyMessage"></p>
+</div>
+
+<div id="login" class="section">
+<h1>🔐 Kullanıcı Girişi</h1>
+<input type="text" id="username" placeholder="Kullanıcı Adı"><br>
+<input type="password" id="password" placeholder="Şifre"><br>
+<button onclick="login()">Giriş Yap</button>
+<p id="loginMessage"></p>
+</div>
+
+<script>
+function showSection(id){
+    document.querySelectorAll('.section').forEach(sec=>{
+        sec.classList.remove('active');
+    });
+    document.getElementById(id).classList.add('active');
+}
+
+function copyIP(){
+    let ip = document.getElementById("ip").innerText;
+    navigator.clipboard.writeText(ip);
+    document.getElementById("copyMessage").innerText="IP kopyalandı!";
+}
+
+function login(){
+    let user=document.getElementById("username").value;
+    let pass=document.getElementById("password").value;
+
+    if(user.length>3 && pass.length>3){
+        localStorage.setItem("user",user);
+        document.getElementById("loginMessage").innerText="Giriş başarılı!";
+    }else{
+        document.getElementById("loginMessage").innerText="Bilgiler hatalı!";
+    }
+}
+
+function buyRank(rank){
+    let user=localStorage.getItem("user");
+    if(!user){
+        document.getElementById("buyMessage").innerText="Önce giriş yapmalısın!";
+    }else{
+        document.getElementById("buyMessage").innerText=user+" adlı kullanıcı "+rank+" rankını satın almak istiyor!";
+    }
+}
+</script>
+
+</body>
 </html>
+
