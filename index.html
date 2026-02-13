@@ -50,6 +50,8 @@ nav{position:fixed;width:100%;top:0;display:flex;justify-content:space-between;a
 .role-admin{background:linear-gradient(90deg,#ff3b3b,#ff8a00);box-shadow:0 0 15px #ff3b3b}
 .panel{margin-top:30px;padding:20px;border:1px solid rgba(255,255,255,0.1);border-radius:15px;background:#121a30;display:none;transition:0.3s;box-shadow:0 0 20px rgba(0,0,0,0.5)}
 .panel h3{font-family:'Orbitron';margin-bottom:15px}
+.panel button{margin-top:10px;padding:10px 15px;border:none;border-radius:8px;background:linear-gradient(90deg,#00f7ff,#8a2be2);color:white;cursor:pointer;transition:0.3s}
+.panel button:hover{transform:scale(1.05);box-shadow:0 0 20px rgba(0,247,255,0.6)}
 
 /* MODAL */
 .modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.8);justify-content:center;align-items:center;z-index:2000}
@@ -125,14 +127,21 @@ footer{text-align:center;padding:30px;background:#0b0f1a;opacity:0.6}
 <div class="panel" id="vipPanel">
 <h3>VIP Panel</h3>
 <p>Buradan VIP BoxPvP avantajlarını kullanabilirsin.</p>
+<button onclick="alert('Günlük BoxPvP Kit alındı!')">Kit Al</button>
+<button onclick="alert('Spawn seçildi!')">Spawn Seç</button>
 </div>
 <div class="panel" id="mvipPanel">
 <h3>MVIP Panel</h3>
 <p>Buradan MVIP BoxPvP avantajlarını kullanabilirsin.</p>
+<button onclick="alert('Gelişmiş BoxPvP Kit alındı!')">Kit Al</button>
+<button onclick="alert('Spawn seçildi!')">Spawn Seç</button>
+<button onclick="alert('Özel MVIP alanına giriş!')">Özel Alan</button>
 </div>
 <div class="panel" id="adminPanel">
 <h3>Admin Panel</h3>
 <p>Buradan sunucu ve kullanıcıları yönetebilirsin.</p>
+<button onclick="alert('Kullanıcı yönetim paneli açıldı!')">Kullanıcı Yönetimi</button>
+<button onclick="alert('Sunucu ayarları açıldı!')">Sunucu Ayarları</button>
 </div>
 </div>
 
@@ -169,7 +178,6 @@ function copyIP(){navigator.clipboard.writeText(document.getElementById('ip').in
 function openModal(type){document.getElementById(type+'Modal').style.display='flex';}
 window.onclick=function(e){if(e.target.classList.contains('modal')) e.target.style.display='none';}
 
-/* AUTH SYSTEM */
 function register(){
   let u=document.getElementById('regUser').value;
   let p=document.getElementById('regPass').value;
