@@ -14,8 +14,6 @@ nav{position:fixed;width:100%;top:0;display:flex;justify-content:space-between;a
 .logo{font-family:'Orbitron';font-size:26px;font-weight:800;background:linear-gradient(90deg,#00f7ff,#8a2be2);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 .nav-right{display:flex;gap:15px;align-items:center}
 .nav-btn{padding:10px 18px;border-radius:8px;border:none;font-weight:600;cursor:pointer;transition:0.3s;position:relative}
-.nav-btn::after{content:'';position:absolute;inset:0;border-radius:8px;box-shadow:0 0 15px rgba(0,247,255,0);transition:0.3s}
-.nav-btn:hover::after{box-shadow:0 0 15px rgba(0,247,255,0.6)}
 .login{background:#00f7ff;color:black}
 .register{background:#8a2be2;color:white}
 .logout{background:#ff3b3b;color:white;display:none}
@@ -27,40 +25,18 @@ nav{position:fixed;width:100%;top:0;display:flex;justify-content:space-between;a
 .ip-box:hover{transform:scale(1.07);box-shadow:0 0 40px rgba(0,247,255,0.5)}
 .stats{margin-top:20px;font-size:18px}
 
-/* RANKS */
-.section{padding:120px 20px;text-align:center}
-.section h2{font-family:'Orbitron';font-size:40px;margin-bottom:60px}
-.rank-container{display:flex;flex-wrap:wrap;justify-content:center;gap:30px}
-.card{background:linear-gradient(145deg,#121a30,#0e1425);padding:35px;width:320px;border-radius:20px;border:1px solid rgba(255,255,255,0.08);transition:0.4s;position:relative}
-.card:hover{transform:translateY(-10px);box-shadow:0 0 50px rgba(138,43,226,0.5)}
-.card h3{font-family:'Orbitron';font-size:26px;margin-bottom:15px}
-.card ul{list-style:none;text-align:left;margin:20px 0}
-.card ul li{margin:8px 0;font-size:14px;opacity:0.9}
-.price{font-size:22px;font-weight:600;margin-top:10px}
-.buy-btn{margin-top:15px;padding:12px;border:none;border-radius:10px;width:100%;cursor:pointer;font-weight:600;background:linear-gradient(90deg,#00f7ff,#8a2be2);color:white;transition:0.3s;text-shadow:0 0 5px rgba(0,0,0,0.3)}
-.buy-btn:hover{transform:scale(1.05);box-shadow:0 0 25px rgba(0,247,255,0.6)}
-
-/* DASHBOARD */
-.dashboard{padding:80px 20px;text-align:center;display:none}
-.dashboard h2{font-family:'Orbitron';font-size:36px;margin-bottom:20px}
-.role-badge{display:inline-block;padding:5px 10px;border-radius:8px;color:white;margin-left:10px;font-weight:600;font-size:14px;text-shadow:0 0 5px rgba(0,0,0,0.5)}
-.role-user{background:#555}
-.role-vip{background:linear-gradient(90deg,#00f7ff,#00c8ff);box-shadow:0 0 15px #00f7ff}
-.role-mvip{background:linear-gradient(90deg,#ff00c8,#ff8a00);box-shadow:0 0 15px #ff00c8}
-.role-admin{background:linear-gradient(90deg,#ff3b3b,#ff8a00);box-shadow:0 0 15px #ff3b3b}
-.panel{margin-top:30px;padding:20px;border:1px solid rgba(255,255,255,0.1);border-radius:15px;background:#121a30;display:none;transition:0.3s;box-shadow:0 0 20px rgba(0,0,0,0.5)}
-.panel h3{font-family:'Orbitron';margin-bottom:15px}
-.panel button{margin-top:10px;padding:10px 15px;border:none;border-radius:8px;background:linear-gradient(90deg,#00f7ff,#8a2be2);color:white;cursor:pointer;transition:0.3s}
-.panel button:hover{transform:scale(1.05);box-shadow:0 0 20px rgba(0,247,255,0.6)}
-
 /* MODAL */
 .modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.8);justify-content:center;align-items:center;z-index:2000}
 .modal-content{background:#121a30;padding:40px;border-radius:20px;width:350px;border:1px solid rgba(255,255,255,0.1)}
 .modal-content h2{text-align:center;margin-bottom:20px;font-family:'Orbitron'}
-.modal-content input, .modal-content select{width:100%;padding:12px;margin:10px 0;border:none;border-radius:8px;background:#0e1425;color:white}
+.modal-content input{width:100%;padding:12px;margin:10px 0;border:none;border-radius:8px;background:#0e1425;color:white}
 .modal-content button{width:100%;padding:12px;margin-top:10px;border:none;border-radius:8px;background:linear-gradient(90deg,#00f7ff,#8a2be2);color:white;font-weight:600;cursor:pointer;transition:0.3s}
 .modal-content button:hover{transform:scale(1.05);box-shadow:0 0 25px rgba(0,247,255,0.5)}
 
+.google-btn{background:#4285F4; color:white; font-weight:600; margin-top:15px; width:100%; padding:12px; border:none; border-radius:8px; cursor:pointer; transition:0.3s;}
+.google-btn:hover{background:#357ae8;}
+
+/* FOOTER */
 footer{text-align:center;padding:30px;background:#0b0f1a;opacity:0.6}
 </style>
 </head>
@@ -82,92 +58,19 @@ footer{text-align:center;padding:30px;background:#0b0f1a;opacity:0.6}
 <div class="stats">Online Oyuncu: <b id="playerCount">Yükleniyor...</b></div>
 </div>
 
-<div class="section">
-<h2>💎 PREMIUM RANKLAR</h2>
-<div class="rank-container">
-<div class="card">
-<h3>VIP</h3>
-<ul>
-<li>✔ Günlük BoxPvP Kit</li>
-<li>✔ 1 Spawn Hakkı</li>
-<li>✔ Özel Sohbet Rengi</li>
-</ul>
-<div class="price">50₺</div>
-<button class="buy-btn">Satın Al</button>
-</div>
-
-<div class="card">
-<h3>MVIP</h3>
-<ul>
-<li>✔ Gelişmiş BoxPvP Kit</li>
-<li>✔ 3 Spawn Hakkı</li>
-<li>✔ Özel Prefix</li>
-<li>✔ Özel MVIP Alanı</li>
-</ul>
-<div class="price">150₺</div>
-<button class="buy-btn">Satın Al</button>
-</div>
-
-<div class="card">
-<h3>ADMIN</h3>
-<ul>
-<li>✔ Sunucu Yönetimi</li>
-<li>✔ Özel Alanlara Erişim</li>
-<li>✔ Kullanıcı Yönetimi</li>
-</ul>
-<div class="price">—</div>
-<button class="buy-btn" disabled>Yetki</button>
-</div>
-</div>
-</div>
-
-<!-- DASHBOARD -->
-<div class="dashboard" id="dashboard">
-<h2>Hoşgeldin, <span id="dashUser"></span><span id="dashRole" class="role-badge"></span></h2>
-<div class="panel" id="vipPanel">
-<h3>VIP Panel</h3>
-<p>Buradan VIP BoxPvP avantajlarını kullanabilirsin.</p>
-<button onclick="alert('Günlük BoxPvP Kit alındı!')">Kit Al</button>
-<button onclick="alert('Spawn seçildi!')">Spawn Seç</button>
-</div>
-<div class="panel" id="mvipPanel">
-<h3>MVIP Panel</h3>
-<p>Buradan MVIP BoxPvP avantajlarını kullanabilirsin.</p>
-<button onclick="alert('Gelişmiş BoxPvP Kit alındı!')">Kit Al</button>
-<button onclick="alert('Spawn seçildi!')">Spawn Seç</button>
-<button onclick="alert('Özel MVIP alanına giriş!')">Özel Alan</button>
-</div>
-<div class="panel" id="adminPanel">
-<h3>Admin Panel</h3>
-<p>Buradan sunucu ve kullanıcıları yönetebilirsin.</p>
-<button onclick="alert('Kullanıcı yönetim paneli açıldı!')">Kullanıcı Yönetimi</button>
-<button onclick="alert('Sunucu ayarları açıldı!')">Sunucu Ayarları</button>
-</div>
-</div>
-
-<!-- LOGIN -->
+<!-- LOGIN MODAL -->
 <div class="modal" id="loginModal">
 <div class="modal-content">
 <h2>Giriş Yap</h2>
-<input type="text" id="loginUser" placeholder="Kullanıcı Adı">
-<input type="password" id="loginPass" placeholder="Şifre">
-<button onclick="login()">Giriş</button>
+<button class="google-btn" onclick="googleLogin()">Google ile Giriş Yap</button>
 </div>
 </div>
 
-<!-- REGISTER -->
+<!-- REGISTER MODAL -->
 <div class="modal" id="registerModal">
 <div class="modal-content">
 <h2>Kayıt Ol</h2>
-<input type="text" id="regUser" placeholder="Kullanıcı Adı">
-<input type="password" id="regPass" placeholder="Şifre">
-<select id="regRole">
-  <option value="user">Normal</option>
-  <option value="vip">VIP</option>
-  <option value="mvip">MVIP</option>
-  <option value="admin">ADMIN</option>
-</select>
-<button onclick="register()">Hesap Oluştur</button>
+<button class="google-btn" onclick="googleLogin()">Google ile Kayıt Ol</button>
 </div>
 </div>
 
@@ -178,29 +81,13 @@ function copyIP(){navigator.clipboard.writeText(document.getElementById('ip').in
 function openModal(type){document.getElementById(type+'Modal').style.display='flex';}
 window.onclick=function(e){if(e.target.classList.contains('modal')) e.target.style.display='none';}
 
-function register(){
-  let u=document.getElementById('regUser').value;
-  let p=document.getElementById('regPass').value;
-  let r=document.getElementById('regRole').value;
-  if(u && p){
-    let users = JSON.parse(localStorage.getItem('users')||'[]');
-    users.push({username:u,pass:p,role:r});
-    localStorage.setItem('users',JSON.stringify(users));
-    alert('Kayıt başarılı!');
-    document.getElementById('registerModal').style.display='none';
-  }
-}
-
-function login(){
-  let u=document.getElementById('loginUser').value;
-  let p=document.getElementById('loginPass').value;
-  let users = JSON.parse(localStorage.getItem('users')||'[]');
-  let user = users.find(x=>x.username===u && x.pass===p);
-  if(user){
-    localStorage.setItem('loggedIn',JSON.stringify(user));
-    checkLogin();
-    document.getElementById('loginModal').style.display='none';
-  } else { alert('Hatalı giriş!'); }
+/* DEMO GOOGLE LOGIN */
+function googleLogin(){
+  let user = {username:"GoogleUser", role:"user"};
+  localStorage.setItem('loggedIn', JSON.stringify(user));
+  checkLogin();
+  document.getElementById('loginModal').style.display='none';
+  document.getElementById('registerModal').style.display='none';
 }
 
 function logout(){localStorage.removeItem('loggedIn');checkLogin();}
@@ -213,22 +100,11 @@ function checkLogin(){
     document.querySelector('.login').style.display='none';
     document.querySelector('.register').style.display='none';
     document.getElementById('logoutBtn').style.display='inline-block';
-    
-    document.getElementById('dashboard').style.display='block';
-    document.getElementById('dashUser').innerText = user.username;
-    let dashRole = document.getElementById('dashRole');
-    dashRole.innerText = user.role.toUpperCase();
-    dashRole.className = 'role-badge role-'+user.role;
-
-    document.getElementById('vipPanel').style.display = user.role==='vip' ? 'block':'none';
-    document.getElementById('mvipPanel').style.display = user.role==='mvip' ? 'block':'none';
-    document.getElementById('adminPanel').style.display = user.role==='admin' ? 'block':'none';
   } else {
     document.getElementById('welcome').style.display='none';
     document.querySelector('.login').style.display='inline-block';
     document.querySelector('.register').style.display='inline-block';
     document.getElementById('logoutBtn').style.display='none';
-    document.getElementById('dashboard').style.display='none';
   }
 }
 checkLogin();
