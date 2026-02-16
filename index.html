@@ -1,42 +1,113 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NovarynMC</title>
+
+<style>
+body{
+margin:0;
+font-family:Arial;
+background:#0f172a;
+color:white;
+text-align:center;
+}
+
+nav{
+display:flex;
+justify-content:space-between;
+padding:20px 40px;
+background:#111827;
+}
+
+h1{
+margin-top:60px;
+}
+
+.box{
+background:#1f2937;
+max-width:400px;
+margin:40px auto;
+padding:25px;
+border-radius:12px;
+}
+
+input{
+width:100%;
+padding:10px;
+margin:10px 0;
+border:none;
+border-radius:6px;
+}
+
+button{
+padding:10px 18px;
+border:none;
+border-radius:6px;
+background:#00eaff;
+cursor:pointer;
+font-weight:bold;
+}
+
+button:hover{
+opacity:0.8;
+}
+</style>
+</head>
+<body>
+
+<nav>
+<div><b>NovarynMC</b></div>
+<div>BoxPvP</div>
+</nav>
+
+<h1>Oy Ver & Ödül Al</h1>
+
+<div class="box">
+<p>Minecraft Nickini Yaz</p>
+<input type="text" id="mcname" placeholder="Nick">
+<button onclick="vote()">Oy Ver</button>
+<p id="voteMsg"></p>
+<p>Toplam Oy: <span id="voteCount">0</span></p>
+</div>
+
 <script>
+
 let votes = JSON.parse(localStorage.getItem("votes") || "[]");
 
 function vote(){
-  let mcname = document.getElementById("mcname").value.trim();
-  let msg = document.getElementById("voteMsg");
 
-  if(mcname === ""){
-    msg.innerText = "Nick gir!";
-    return;
-  }
+let mcname = document.getElementById("mcname").value.trim();
+let msg = document.getElementById("voteMsg");
 
-  // Aynı nick daha önce kullanılmış mı?
-  if(votes.find(v => v.name.toLowerCase() === mcname.toLowerCase())){
-    msg.innerText = "Bu nick zaten oy vermiş!";
-    return;
-  }
+if(mcname === ""){
+msg.innerText = "Nick gir!";
+return;
+}
 
-  // Basit IP kontrol (tarayıcı izi)
-  let fingerprint = navigator.userAgent;
+// Aynı nick tekrar oy veremesin
+if(votes.find(v => v.name.toLowerCase() === mcname.toLowerCase())){
+msg.innerText = "Bu nick zaten oy vermiş!";
+return;
+}
 
-  if(votes.find(v => v.fingerprint === fingerprint)){
-    msg.innerText = "Bu cihazdan zaten oy verilmiş!";
-    return;
-  }
+votes.push({
+name: mcname,
+date: new Date()
+});
 
-  votes.push({
-    name: mcname,
-    fingerprint: fingerprint,
-    date: new Date()
-  });
+localStorage.setItem("votes", JSON.stringify(votes));
 
-  localStorage.setItem("votes", JSON.stringify(votes));
-
-  document.getElementById("voteCount").innerText = votes.length;
-  msg.innerText = "Oy kaydedildi! Vote sitesinden oy ver.";
+document.getElementById("voteCount").innerText = votes.length;
+msg.innerText = "Oy kaydedildi!";
 }
 
 window.onload = function(){
-  document.getElementById("voteCount").innerText = votes.length;
+document.getElementById("voteCount").innerText = votes.length;
 }
+
 </script>
+
+</body>
+</html>
