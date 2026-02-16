@@ -1,102 +1,291 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NovarynMC | BoxPvP</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',sans-serif;background:#0b0f1a;color:white;overflow-x:hidden}
+
+/* NAV */
+nav{
+position:fixed;
+width:100%;
+top:0;
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:20px 60px;
+background:rgba(10,15,30,0.85);
+backdrop-filter:blur(15px);
+z-index:1000;
+border-bottom:1px solid rgba(255,255,255,0.05)
+}
+
+.logo{
+font-family:'Orbitron';
+font-size:26px;
+font-weight:800;
+background:linear-gradient(90deg,#00f7ff,#8a2be2);
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent
+}
+
+.nav-right{display:flex;gap:15px;align-items:center}
+
+.nav-btn{
+padding:10px 18px;
+border-radius:8px;
+border:none;
+font-weight:600;
+cursor:pointer;
+transition:0.3s
+}
+
+.login{background:#00f7ff;color:black}
+.register{background:#8a2be2;color:white}
+.logout{background:#ff3b3b;color:white;display:none}
+
+/* HERO */
+.hero{
+height:100vh;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+text-align:center;
+padding:120px 20px;
+background:radial-gradient(circle at top,#111a35,#0b0f1a)
+}
+
+.hero h1{
+font-family:'Orbitron';
+font-size:64px;
+background:linear-gradient(90deg,#00f7ff,#ff00c8);
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent
+}
+
+.ip-box{
+margin-top:40px;
+background:rgba(255,255,255,0.05);
+padding:25px 40px;
+border-radius:18px;
+cursor:pointer;
+transition:0.3s;
+border:1px solid rgba(255,255,255,0.1)
+}
+
+.ip-box:hover{
+transform:scale(1.07);
+box-shadow:0 0 40px rgba(0,247,255,0.5)
+}
+
+.stats{
+margin-top:20px;
+font-size:18px
+}
+
+/* MODAL */
+.modal{
+display:none;
+position:fixed;
+inset:0;
+background:rgba(0,0,0,0.8);
+justify-content:center;
+align-items:center;
+z-index:2000
+}
+
+.modal-content{
+background:#121a30;
+padding:40px;
+border-radius:20px;
+width:350px;
+border:1px solid rgba(255,255,255,0.1)
+}
+
+.modal-content h2{
+text-align:center;
+margin-bottom:20px;
+font-family:'Orbitron'
+}
+
+.modal-content input{
+width:100%;
+padding:12px;
+margin:10px 0;
+border:none;
+border-radius:8px;
+background:#0e1425;
+color:white
+}
+
+.modal-content button{
+width:100%;
+padding:12px;
+margin-top:10px;
+border:none;
+border-radius:8px;
+background:linear-gradient(90deg,#00f7ff,#8a2be2);
+color:white;
+font-weight:600;
+cursor:pointer;
+transition:0.3s
+}
+
+.modal-content button:hover{
+transform:scale(1.05);
+box-shadow:0 0 25px rgba(0,247,255,0.5)
+}
+
+/* VOTE BUTTON */
+.vote-btn{
+position:fixed;
+right:20px;
+bottom:20px;
+background:linear-gradient(90deg,#00f7ff,#ff00c8);
+padding:15px 20px;
+border-radius:50px;
+font-weight:600;
+cursor:pointer;
+z-index:1500;
+box-shadow:0 0 20px rgba(0,247,255,0.6)
+}
+
+footer{
+text-align:center;
+padding:30px;
+background:#0b0f1a;
+opacity:0.6
+}
+</style>
+</head>
+<body>
+
+<nav>
+<div class="logo">NovarynMC</div>
+<div class="nav-right">
+<span id="welcome" style="display:none"></span>
+<button class="nav-btn login" onclick="openModal('login')">Giriş</button>
+<button class="nav-btn register" onclick="openModal('register')">Kayıt</button>
+<button class="nav-btn logout" onclick="logout()" id="logoutBtn">Çıkış</button>
+</div>
+</nav>
+
+<div class="hero">
+<h1>NovarynMC – BoxPvP</h1>
+<div class="ip-box" onclick="copyIP()">
+IP: <b>NovarynMC.aternos.me:12212</b><br>
+<small>Tıkla & Kopyala</small>
+</div>
+<div class="stats">
+Toplam Oy: <b id="voteCount">0</b>
+</div>
+</div>
+
+<div class="vote-btn" onclick="vote()">Oy Ver</div>
+
+<!-- LOGIN -->
+<div class="modal" id="loginModal">
+<div class="modal-content">
+<h2>Giriş</h2>
+<input type="text" id="loginNick" placeholder="Nick">
+<input type="password" id="loginPass" placeholder="Şifre">
+<button onclick="login()">Giriş Yap</button>
+</div>
+</div>
+
+<!-- REGISTER -->
+<div class="modal" id="registerModal">
+<div class="modal-content">
+<h2>Kayıt</h2>
+<input type="text" id="regNick" placeholder="Nick">
+<input type="password" id="regPass" placeholder="Şifre">
+<button onclick="register()">Kayıt Ol</button>
+</div>
+</div>
+
+<footer>© 2026 NovarynMC</footer>
+
 <script>
+let users = JSON.parse(localStorage.getItem("users")||"[]");
+let votes = JSON.parse(localStorage.getItem("votes")||"[]");
 
-// ====== BASİT SHA256 ŞİFRELEME ======
-async function hash(text){
-const encoder = new TextEncoder();
-const data = encoder.encode(text);
-const hashBuffer = await crypto.subtle.digest("SHA-256", data);
-const hashArray = Array.from(new Uint8Array(hashBuffer));
-return hashArray.map(b => b.toString(16).padStart(2,"0")).join("");
+function copyIP(){
+navigator.clipboard.writeText("NovarynMC.aternos.me:12212");
+alert("IP Kopyalandı!");
 }
 
-// ====== DATABASE ======
-let users = JSON.parse(localStorage.getItem("users") || "[]");
-
-// ====== REGISTER ======
-async function register(){
-
-let nick = prompt("Minecraft Nick:");
-let pass = prompt("Şifre:");
-
-if(!nick || !pass) return alert("Boş bırakılamaz");
-
-if(users.find(u => u.nick.toLowerCase() === nick.toLowerCase())){
-return alert("Bu nick zaten kayıtlı!");
+function openModal(type){
+document.getElementById(type+"Modal").style.display="flex";
 }
 
-let hashed = await hash(pass);
-
-users.push({
-nick: nick,
-password: hashed,
-role: "user"
-});
-
-localStorage.setItem("users", JSON.stringify(users));
-alert("Kayıt başarılı!");
+window.onclick=function(e){
+if(e.target.classList.contains("modal")) e.target.style.display="none";
 }
 
-// ====== LOGIN ======
-async function login(){
-
-let nick = prompt("Nick:");
-let pass = prompt("Şifre:");
-
-let user = users.find(u => u.nick.toLowerCase() === nick.toLowerCase());
-if(!user) return alert("Kullanıcı yok!");
-
-let hashed = await hash(pass);
-
-if(user.password !== hashed){
-return alert("Şifre yanlış!");
+function register(){
+let nick=document.getElementById("regNick").value.trim();
+let pass=document.getElementById("regPass").value.trim();
+if(!nick||!pass)return alert("Boş bırakılamaz");
+if(users.find(u=>u.nick.toLowerCase()===nick.toLowerCase()))
+return alert("Bu nick zaten kayıtlı");
+users.push({nick:nick,password:pass});
+localStorage.setItem("users",JSON.stringify(users));
+alert("Kayıt başarılı");
+document.getElementById("registerModal").style.display="none";
 }
 
-localStorage.setItem("loggedIn", JSON.stringify(user));
-alert("Giriş başarılı!");
+function login(){
+let nick=document.getElementById("loginNick").value.trim();
+let pass=document.getElementById("loginPass").value.trim();
+let user=users.find(u=>u.nick.toLowerCase()===nick.toLowerCase());
+if(!user)return alert("Kullanıcı yok");
+if(user.password!==pass)return alert("Şifre yanlış");
+localStorage.setItem("loggedIn",JSON.stringify(user));
 checkLogin();
+document.getElementById("loginModal").style.display="none";
 }
 
-// ====== ADMIN PANEL ======
-function adminPanel(){
-
-let user = JSON.parse(localStorage.getItem("loggedIn") || "null");
-
-if(!user || user.role !== "admin"){
-return alert("Yetkin yok!");
-}
-
-let list = users.map(u => u.nick + " (" + u.role + ")").join("\n");
-alert("Kayıtlı Kullanıcılar:\n\n" + list);
-}
-
-// ====== LOGOUT ======
 function logout(){
 localStorage.removeItem("loggedIn");
 checkLogin();
 }
 
-// ====== LOGIN STATE ======
 function checkLogin(){
-let user = JSON.parse(localStorage.getItem("loggedIn") || "null");
-
+let user=JSON.parse(localStorage.getItem("loggedIn")||"null");
 if(user){
-document.getElementById("welcome").innerText = "Hoşgeldin " + user.nick;
-document.getElementById("welcome").style.display = "block";
+document.getElementById("welcome").innerText="Hoşgeldin "+user.nick;
+document.getElementById("welcome").style.display="block";
+document.querySelector(".login").style.display="none";
+document.querySelector(".register").style.display="none";
+document.getElementById("logoutBtn").style.display="inline-block";
 }else{
-document.getElementById("welcome").style.display = "none";
+document.getElementById("welcome").style.display="none";
+document.querySelector(".login").style.display="inline-block";
+document.querySelector(".register").style.display="inline-block";
+document.getElementById("logoutBtn").style.display="none";
 }
 }
-
 checkLogin();
 
-// ====== İLK ADMIN OLUŞTUR ======
-if(!users.find(u => u.role === "admin")){
-users.push({
-nick:"admin",
-password:"240be518fabd2724ddb6f04eeb8e5a03", // şifre: 1234 (hash)
-role:"admin"
-});
-localStorage.setItem("users", JSON.stringify(users));
+function vote(){
+let user=JSON.parse(localStorage.getItem("loggedIn")||"null");
+if(!user)return alert("Önce giriş yapmalısın");
+if(votes.find(v=>v.nick===user.nick))
+return alert("Zaten oy verdin");
+votes.push({nick:user.nick});
+localStorage.setItem("votes",JSON.stringify(votes));
+document.getElementById("voteCount").innerText=votes.length;
+alert("Oy verildi!");
 }
-
+document.getElementById("voteCount").innerText=votes.length;
 </script>
+
+</body>
+</html>
