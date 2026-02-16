@@ -3,269 +3,252 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ultra BoxPvP Panel</title>
+<title>Ultra Arş BoxPvP</title>
 
 <style>
 body{
     margin:0;
-    font-family:Arial;
-    background:#0f0f0f;
+    font-family:Segoe UI;
+    background:linear-gradient(135deg,#0f0f0f,#1c1c1c);
     color:white;
     text-align:center;
 }
-
+.glass{
+    background:rgba(255,255,255,0.05);
+    backdrop-filter:blur(10px);
+    padding:20px;
+    margin:20px auto;
+    border-radius:15px;
+    width:90%;
+    max-width:600px;
+    box-shadow:0 0 20px #00ffff22;
+}
 h2{
     color:#00ffff;
-    text-shadow:0 0 10px #00ffff;
+    text-shadow:0 0 15px #00ffff;
 }
-
-button{
-    padding:10px 20px;
+input,button{
+    padding:10px;
     margin:5px;
+    border-radius:8px;
     border:none;
-    border-radius:5px;
+}
+button{
     cursor:pointer;
     font-weight:bold;
 }
-
+.neon{
+    background:#00ffff;
+    color:black;
+}
 .vip{background:gold;color:black;}
 .lvip{background:deepskyblue;}
 .mvip{background:red;color:white;}
-.market{background:#00ff99;}
-.case{background:purple;color:white;}
-.adminbtn{background:#ff4444;}
-
-input{
-    padding:8px;
-    margin:5px;
-    border-radius:5px;
-    border:none;
-}
-
-.panel{
-    display:none;
-    padding:20px;
-}
-
-.box{
-    background:#1a1a1a;
-    margin:15px;
-    padding:15px;
-    border-radius:10px;
-    box-shadow:0 0 15px #00ffff33;
-}
-
-.leaderboard{
-    background:#111;
-    padding:10px;
-    border-radius:10px;
-    margin-top:15px;
-}
-
-.adminpanel{
-    display:none;
-    background:#220000;
-    padding:15px;
-    border-radius:10px;
-    margin-top:15px;
-}
-
-.online{
-    position:fixed;
-    top:10px;
-    right:20px;
-    color:#00ff99;
-}
+.admin{background:#ff4444;}
+.casebtn{background:purple;color:white;}
+.hidden{display:none;}
 </style>
 </head>
 <body>
 
-<div class="online">Online: <span id="onlineCount">0</span></div>
+<h2>Ultra Arş BoxPvP Panel</h2>
+<div>Online: <span id="online">0</span></div>
 
-<div id="login">
-<h2>Ultra BoxPvP Giriş</h2>
-<input type="text" id="nick" placeholder="Nick">
-<input type="password" id="adminPass" placeholder="Admin Şifre">
+<div class="glass" id="authBox">
+<h3>Kayıt / Giriş</h3>
+<input id="nick" placeholder="Nick">
+<input id="pass" type="password" placeholder="Şifre">
 <br>
-<button onclick="login()">Giriş Yap</button>
+<button class="neon" onclick="auth()">Giriş / Kayıt</button>
 </div>
 
-<div class="panel" id="panel">
+<div class="glass hidden" id="panel">
+<h3 id="welcome"></h3>
+<p>Coin: <span id="coin"></span></p>
+<p>Level: <span id="level"></span> | XP: <span id="xp"></span>/100</p>
+<p>Rank: <span id="rank"></span></p>
+<p>Streak: <span id="streak"></span> gün</p>
 
-<h2 id="welcome"></h2>
+<button onclick="daily()">Daily</button>
+<button onclick="vote()">Vote</button>
+<button onclick="transfer()">Coin Transfer</button>
 
-<div class="box">
-<p>Coin: <span id="coin">0</span></p>
-<p>Rank: <span id="rank">Oyuncu</span></p>
-<button onclick="vote()">Oy Ver (+10)</button>
-<button onclick="daily()">Günlük (+20)</button>
-</div>
+<h4>VIP</h4>
+<button class="vip" onclick="buyRank('VIP',50,5)">VIP</button>
+<button class="lvip" onclick="buyRank('LVIP',100,10)">LVIP</button>
+<button class="mvip" onclick="buyRank('MVIP',150,20)">MVIP</button>
 
-<div class="box">
-<h3>VIP Paketler</h3>
-<button class="vip" onclick="buyRank('VIP',50,5)">VIP - 50</button>
-<button class="lvip" onclick="buyRank('LVIP',100,10)">LVIP - 100</button>
-<button class="mvip" onclick="buyRank('MVIP',150,20)">MVIP - 150</button>
-</div>
-
-<div class="box">
-<h3>Market</h3>
-<button class="market" onclick="buyItem(30)">Sharpness Kit - 30</button>
-<button class="market" onclick="buyItem(60)">God Apple - 60</button>
-</div>
-
-<div class="box">
-<h3>Kasa Aç</h3>
-<button class="case" onclick="openCase()">Kasa Aç (40 Coin)</button>
+<h4>Kasa</h4>
+<button class="casebtn" onclick="openCase()">Kasa Aç (40)</button>
 <p id="caseResult"></p>
-</div>
 
-<div class="leaderboard">
-<h3>Liderlik</h3>
+<h4>Battle Pass</h4>
+<button onclick="battlePass()">+20 XP</button>
+
+<h4>Liderlik</h4>
 <div id="leaderboard"></div>
-</div>
 
-<div class="adminpanel" id="adminPanel">
-<h3>ADMIN PANEL</h3>
-<input type="text" id="giveNick" placeholder="Nick">
-<input type="number" id="giveCoin" placeholder="Coin">
-<button class="adminbtn" onclick="giveCoin()">Coin Ver</button>
+<div id="adminPanel" class="hidden">
+<h4>ADMIN PANEL</h4>
+<input id="giveNick" placeholder="Nick">
+<input id="giveCoin" placeholder="Coin">
+<button class="admin" onclick="giveCoin()">Coin Ver</button>
 </div>
 
 </div>
 
 <script>
 
-let users = JSON.parse(localStorage.getItem("users")) || {};
-let currentUser = null;
+let users=JSON.parse(localStorage.getItem("ultraUsers"))||{};
+let current=null;
 
 function save(){
-    localStorage.setItem("users", JSON.stringify(users));
+localStorage.setItem("ultraUsers",JSON.stringify(users));
 }
 
-function updateOnline(){
-    document.getElementById("onlineCount").innerText =
-    Object.keys(users).length;
+function fakeHash(str){
+return btoa(str+"ultraSalt");
 }
 
-function login(){
-    let nick=document.getElementById("nick").value;
-    let pass=document.getElementById("adminPass").value;
+function auth(){
+let nick=document.getElementById("nick").value;
+let pass=document.getElementById("pass").value;
+if(!nick||!pass)return alert("Boş bırakma");
 
-    if(!nick) return alert("Nick gir!");
+if(!users[nick]){
+users[nick]={
+pass:fakeHash(pass),
+coin:100,
+xp:0,
+level:1,
+rank:"Oyuncu",
+bonus:0,
+lastDaily:0,
+streak:0
+};
+}else{
+if(users[nick].pass!==fakeHash(pass))
+return alert("Şifre yanlış!");
+}
 
-    if(!users[nick]){
-        users[nick]={
-            coin:100,
-            rank:"Oyuncu",
-            voted:false,
-            lastDaily:0,
-            bonus:0
-        };
-    }
+current=nick;
+save();
+loadPanel();
+}
 
-    currentUser=nick;
-
-    document.getElementById("login").style.display="none";
-    document.getElementById("panel").style.display="block";
-    document.getElementById("welcome").innerText="Hoşgeldin "+nick;
-
-    if(nick==="NexLight" && pass==="sunucusifresi123"){
-        document.getElementById("adminPanel").style.display="block";
-    }
-
-    save();
-    update();
-    updateOnline();
+function loadPanel(){
+document.getElementById("authBox").classList.add("hidden");
+document.getElementById("panel").classList.remove("hidden");
+document.getElementById("welcome").innerText="Hoşgeldin "+current;
+update();
+if(current==="NexLight" && document.getElementById("pass").value==="sunucusifresi123")
+document.getElementById("adminPanel").classList.remove("hidden");
+updateOnline();
 }
 
 function update(){
-    document.getElementById("coin").innerText=users[currentUser].coin;
-    document.getElementById("rank").innerText=users[currentUser].rank;
-    updateLeaderboard();
+let u=users[current];
+if(u.coin<0)u.coin=0;
+document.getElementById("coin").innerText=u.coin;
+document.getElementById("xp").innerText=u.xp;
+document.getElementById("level").innerText=u.level;
+document.getElementById("rank").innerText=u.rank;
+document.getElementById("streak").innerText=u.streak;
+updateLeaderboard();
 }
 
-function vote(){
-    if(users[currentUser].voted) return alert("Zaten oy verdin!");
-    users[currentUser].coin+=10+users[currentUser].bonus;
-    users[currentUser].voted=true;
-    save();
-    update();
+function addXP(amount){
+let u=users[current];
+u.xp+=amount;
+if(u.xp>=100){
+u.level++;
+u.xp=0;
+u.coin+=50;
+}
+save();
+update();
 }
 
 function daily(){
-    let now=Date.now();
-    if(now-users[currentUser].lastDaily<86400000)
-        return alert("Günlük aldın!");
-
-    users[currentUser].coin+=20+users[currentUser].bonus;
-    users[currentUser].lastDaily=now;
-    save();
-    update();
+let u=users[current];
+let now=Date.now();
+if(now-u.lastDaily<86400000)return alert("Zaten aldın");
+u.lastDaily=now;
+u.coin+=20+u.bonus;
+u.streak++;
+addXP(10);
+save();
+update();
 }
 
-function buyRank(rank,price,bonus){
-    if(users[currentUser].coin<price)
-        return alert("Yetersiz coin!");
-
-    users[currentUser].coin-=price;
-    users[currentUser].rank=rank;
-    users[currentUser].bonus=bonus;
-    save();
-    update();
+function vote(){
+users[current].coin+=10+users[current].bonus;
+addXP(5);
+save();
+update();
 }
 
-function buyItem(price){
-    if(users[currentUser].coin<price)
-        return alert("Yetersiz coin!");
-    users[currentUser].coin-=price;
-    save();
-    update();
-    alert("Satın alındı!");
+function buyRank(r,p,b){
+let u=users[current];
+if(u.coin<p)return alert("Yetersiz");
+u.coin-=p;
+u.rank=r;
+u.bonus=b;
+save();
+update();
 }
 
 function openCase(){
-    if(users[currentUser].coin<40)
-        return alert("Yetersiz coin!");
+let u=users[current];
+if(u.coin<40)return alert("Yetersiz");
+u.coin-=40;
+let reward=[20,50,100,200];
+let win=reward[Math.floor(Math.random()*reward.length)];
+u.coin+=win;
+document.getElementById("caseResult").innerText="Kazandın: "+win;
+addXP(15);
+save();
+update();
+}
 
-    users[currentUser].coin-=40;
+function battlePass(){
+addXP(20);
+}
 
-    let reward=Math.floor(Math.random()*100);
-    let win;
-
-    if(reward<50){ win=20; }
-    else if(reward<80){ win=50; }
-    else{ win=100; }
-
-    users[currentUser].coin+=win;
-    document.getElementById("caseResult").innerText=
-    "Kazandın: "+win+" coin!";
-    save();
-    update();
+function transfer(){
+let to=prompt("Nick:");
+let amount=parseInt(prompt("Coin:"));
+if(users[to] && users[current].coin>=amount){
+users[current].coin-=amount;
+users[to].coin+=amount;
+save();
+update();
+}
 }
 
 function giveCoin(){
-    let nick=document.getElementById("giveNick").value;
-    let coin=parseInt(document.getElementById("giveCoin").value);
-
-    if(users[nick]){
-        users[nick].coin+=coin;
-        save();
-        updateLeaderboard();
-        alert("Coin verildi!");
-    }
+let n=document.getElementById("giveNick").value;
+let c=parseInt(document.getElementById("giveCoin").value);
+if(users[n]){
+users[n].coin+=c;
+save();
+updateLeaderboard();
+}
 }
 
 function updateLeaderboard(){
-    let sorted=Object.entries(users)
-    .sort((a,b)=>b[1].coin-a[1].coin);
+let sorted=Object.entries(users)
+.sort((a,b)=>b[1].coin-a[1].coin);
+let html="";
+sorted.forEach(u=>{
+html+=u[0]+" - "+u[1].coin+"<br>";
+});
+document.getElementById("leaderboard").innerHTML=html;
+}
 
-    let html="";
-    sorted.forEach(u=>{
-        html+=u[0]+" - "+u[1].coin+" coin<br>";
-    });
-
-    document.getElementById("leaderboard").innerHTML=html;
+function updateOnline(){
+document.getElementById("online").innerText=
+Object.keys(users).length + Math.floor(Math.random()*5);
 }
 
 updateOnline();
