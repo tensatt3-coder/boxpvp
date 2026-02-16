@@ -3,257 +3,565 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ultra Arş BoxPvP</title>
+<title>NOVARYNMC | BOX PVP ULTRA</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
 
 <style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Orbitron',sans-serif;
+}
+
 body{
-    margin:0;
-    font-family:Segoe UI;
-    background:linear-gradient(135deg,#0f0f0f,#1c1c1c);
-    color:white;
-    text-align:center;
+background:radial-gradient(circle at top,#111,#000);
+color:white;
+min-height:100vh;
+overflow-x:hidden;
 }
+
+/* NEON EFFECT */
+.neon-text{
+color:#00f7ff;
+text-shadow:
+0 0 5px #00f7ff,
+0 0 10px #00f7ff,
+0 0 20px #00f7ff;
+}
+
+.container{
+width:95%;
+max-width:1100px;
+margin:auto;
+padding:20px;
+}
+
 .glass{
-    background:rgba(255,255,255,0.05);
-    backdrop-filter:blur(10px);
-    padding:20px;
-    margin:20px auto;
-    border-radius:15px;
-    width:90%;
-    max-width:600px;
-    box-shadow:0 0 20px #00ffff22;
+background:rgba(255,255,255,0.05);
+backdrop-filter:blur(15px);
+border:1px solid rgba(0,255,255,0.2);
+border-radius:20px;
+padding:25px;
+margin-top:20px;
+box-shadow:0 0 30px rgba(0,255,255,0.2);
+transition:0.3s;
 }
-h2{
-    color:#00ffff;
-    text-shadow:0 0 15px #00ffff;
+
+.glass:hover{
+box-shadow:0 0 40px rgba(0,255,255,0.4);
 }
+
+h1{
+text-align:center;
+margin-top:20px;
+font-size:40px;
+}
+
 input,button{
-    padding:10px;
-    margin:5px;
-    border-radius:8px;
-    border:none;
+padding:12px;
+margin:6px;
+border:none;
+border-radius:12px;
+font-size:14px;
 }
+
+input{
+width:220px;
+background:#111;
+color:white;
+border:1px solid #00f7ff55;
+}
+
 button{
-    cursor:pointer;
-    font-weight:bold;
+cursor:pointer;
+font-weight:bold;
+transition:0.3s;
 }
-.neon{
-    background:#00ffff;
-    color:black;
+
+.btn-primary{
+background:#00f7ff;
+color:black;
 }
-.vip{background:gold;color:black;}
-.lvip{background:deepskyblue;}
-.mvip{background:red;color:white;}
-.admin{background:#ff4444;}
-.casebtn{background:purple;color:white;}
-.hidden{display:none;}
+
+.btn-primary:hover{
+background:#00d0d6;
+}
+
+.btn-vip{background:gold;color:black;}
+.btn-lvip{background:deepskyblue;color:black;}
+.btn-mvip{background:red;color:white;}
+.btn-admin{background:#ff4444;color:white;}
+.btn-case{background:purple;color:white;}
+.btn-market{background:#00ff99;color:black;}
+
+.hidden{
+display:none;
+}
+
+/* XP BAR */
+.xp-bar{
+width:100%;
+height:20px;
+background:#111;
+border-radius:10px;
+overflow:hidden;
+margin-top:10px;
+border:1px solid #00f7ff55;
+}
+
+.xp-fill{
+height:100%;
+width:0%;
+background:linear-gradient(90deg,#00f7ff,#00ff99);
+transition:0.4s;
+}
+
+/* LEADERBOARD */
+.leaderboard-item{
+padding:8px;
+margin-top:5px;
+background:#111;
+border-radius:8px;
+border:1px solid #00f7ff33;
+}
+
+/* HEADER */
+.header-top{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-top:10px;
+font-size:14px;
+}
+
+.online-count{
+color:#00ff99;
+}
+
+/* ANIMATION BACKGROUND PARTICLES */
+body::before{
+content:"";
+position:fixed;
+width:200%;
+height:200%;
+background:radial-gradient(circle,#00f7ff22 1px,transparent 1px);
+background-size:40px 40px;
+animation:moveBg 20s linear infinite;
+z-index:-1;
+}
+
+@keyframes moveBg{
+from{transform:translate(0,0);}
+to{transform:translate(-200px,-200px);}
+}
+
 </style>
 </head>
 <body>
 
-<h2>Ultra Arş BoxPvP Panel</h2>
-<div>Online: <span id="online">0</span></div>
+<div class="container">
 
+<h1 class="neon-text">NOVARYNMC BOX PVP</h1>
+
+<div class="header-top">
+<div>ULTRA EDITION</div>
+<div class="online-count">Online: <span id="onlineCount">0</span></div>
+</div>
+
+<!-- AUTH -->
 <div class="glass" id="authBox">
-<h3>Kayıt / Giriş</h3>
+<h2 class="neon-text">Giriş / Kayıt</h2>
 <input id="nick" placeholder="Nick">
 <input id="pass" type="password" placeholder="Şifre">
 <br>
-<button class="neon" onclick="auth()">Giriş / Kayıt</button>
+<button class="btn-primary" onclick="auth()">Giriş Yap</button>
 </div>
 
-<div class="glass hidden" id="panel">
-<h3 id="welcome"></h3>
+<!-- MAIN PANEL -->
+<div class="glass hidden" id="mainPanel">
+
+<h2 id="welcome"></h2>
+
 <p>Coin: <span id="coin"></span></p>
-<p>Level: <span id="level"></span> | XP: <span id="xp"></span>/100</p>
 <p>Rank: <span id="rank"></span></p>
-<p>Streak: <span id="streak"></span> gün</p>
+<p>Level: <span id="level"></span></p>
 
-<button onclick="daily()">Daily</button>
-<button onclick="vote()">Vote</button>
-<button onclick="transfer()">Coin Transfer</button>
+<div class="xp-bar">
+<div class="xp-fill" id="xpFill"></div>
+</div>
+<p>XP: <span id="xpText"></span>/100</p>
 
-<h4>VIP</h4>
-<button class="vip" onclick="buyRank('VIP',50,5)">VIP</button>
-<button class="lvip" onclick="buyRank('LVIP',100,10)">LVIP</button>
-<button class="mvip" onclick="buyRank('MVIP',150,20)">MVIP</button>
+<hr style="margin:15px 0;border:1px solid #00f7ff33;">
 
-<h4>Kasa</h4>
-<button class="casebtn" onclick="openCase()">Kasa Aç (40)</button>
-<p id="caseResult"></p>
+<h3>Temel İşlemler</h3>
+<button class="btn-primary" onclick="daily()">Daily</button>
+<button class="btn-primary" onclick="vote()">Vote</button>
+<button class="btn-market" onclick="openMarket()">Market</button>
+<button class="btn-case" onclick="openCase()">Kasa Aç</button>
 
-<h4>Battle Pass</h4>
-<button onclick="battlePass()">+20 XP</button>
+<hr style="margin:15px 0;border:1px solid #00f7ff33;">
 
-<h4>Liderlik</h4>
+<h3>VIP Paketler</h3>
+<button class="btn-vip" onclick="buyRank('VIP',50,5)">VIP</button>
+<button class="btn-lvip" onclick="buyRank('LVIP',100,10)">LVIP</button>
+<button class="btn-mvip" onclick="buyRank('MVIP',150,20)">MVIP</button>
+
+<hr style="margin:15px 0;border:1px solid #00f7ff33;">
+
+<h3>Battle Pass</h3>
+<button class="btn-primary" onclick="battlePass()">+20 XP</button>
+
+<hr style="margin:15px 0;border:1px solid #00f7ff33;">
+
+<h3>Liderlik Tablosu</h3>
 <div id="leaderboard"></div>
 
-<div id="adminPanel" class="hidden">
-<h4>ADMIN PANEL</h4>
+<!-- ADMIN PANEL -->
+<div class="glass hidden" id="adminPanel">
+<h3 class="neon-text">ADMIN PANEL</h3>
 <input id="giveNick" placeholder="Nick">
-<input id="giveCoin" placeholder="Coin">
-<button class="admin" onclick="giveCoin()">Coin Ver</button>
+<input id="giveAmount" placeholder="Coin">
+<button class="btn-admin" onclick="giveCoin()">Coin Ver</button>
 </div>
 
 </div>
 
+</div>
+
+<!-- JS PARÇA 2 VE 3 BURAYA GELECEK -->
 <script>
 
-let users=JSON.parse(localStorage.getItem("ultraUsers"))||{};
-let current=null;
+/* ===============================
+   NOVARYNMC ULTRA DATA ENGINE
+================================= */
 
-function save(){
-localStorage.setItem("ultraUsers",JSON.stringify(users));
+let DB = JSON.parse(localStorage.getItem("novarynUltraDB")) || {};
+let currentUser = null;
+
+/* ===== SAVE SYSTEM ===== */
+function saveDB(){
+localStorage.setItem("novarynUltraDB", JSON.stringify(DB));
 }
 
-function fakeHash(str){
-return btoa(str+"ultraSalt");
+/* ===== SIMPLE HASH ===== */
+function hash(str){
+return btoa(str + "novarynUltraSecureSalt2026");
 }
 
+/* ===== AUTH SYSTEM ===== */
 function auth(){
-let nick=document.getElementById("nick").value;
-let pass=document.getElementById("pass").value;
-if(!nick||!pass)return alert("Boş bırakma");
 
-if(!users[nick]){
-users[nick]={
-pass:fakeHash(pass),
-coin:100,
-xp:0,
-level:1,
-rank:"Oyuncu",
-bonus:0,
-lastDaily:0,
-streak:0
+let nick = document.getElementById("nick").value.trim();
+let pass = document.getElementById("pass").value.trim();
+
+if(!nick || !pass){
+alert("Boş bırakma!");
+return;
+}
+
+if(!DB[nick]){
+DB[nick] = {
+password: hash(pass),
+coin: 100,
+xp: 0,
+level: 1,
+rank: "Oyuncu",
+bonus: 0,
+lastDaily: 0,
+streak: 0,
+battleTier: 1,
+created: Date.now()
 };
-}else{
-if(users[nick].pass!==fakeHash(pass))
-return alert("Şifre yanlış!");
+saveDB();
+}
+else{
+if(DB[nick].password !== hash(pass)){
+alert("Şifre yanlış!");
+return;
+}
 }
 
-current=nick;
-save();
+currentUser = nick;
+
 loadPanel();
+
 }
 
+/* ===== LOAD PANEL ===== */
 function loadPanel(){
+
 document.getElementById("authBox").classList.add("hidden");
-document.getElementById("panel").classList.remove("hidden");
-document.getElementById("welcome").innerText="Hoşgeldin "+current;
-update();
-if(current==="NexLight" && document.getElementById("pass").value==="sunucusifresi123")
+document.getElementById("mainPanel").classList.remove("hidden");
+
+document.getElementById("welcome").innerText =
+"Hoşgeldin " + currentUser;
+
+if(currentUser === "NexLight" &&
+document.getElementById("pass").value === "sunucusifresi123"){
 document.getElementById("adminPanel").classList.remove("hidden");
-updateOnline();
 }
 
-function update(){
-let u=users[current];
-if(u.coin<0)u.coin=0;
-document.getElementById("coin").innerText=u.coin;
-document.getElementById("xp").innerText=u.xp;
-document.getElementById("level").innerText=u.level;
-document.getElementById("rank").innerText=u.rank;
-document.getElementById("streak").innerText=u.streak;
+updateUI();
+updateOnlineCount();
+}
+
+/* ===== UI UPDATE ===== */
+function updateUI(){
+
+let u = DB[currentUser];
+
+if(u.coin < 0) u.coin = 0;
+
+document.getElementById("coin").innerText = u.coin;
+document.getElementById("rank").innerText = u.rank;
+document.getElementById("level").innerText = u.level;
+document.getElementById("xpText").innerText = u.xp;
+
+let percent = (u.xp / 100) * 100;
+document.getElementById("xpFill").style.width = percent + "%";
+
 updateLeaderboard();
+saveDB();
 }
 
+/* ===== XP ENGINE ===== */
 function addXP(amount){
-let u=users[current];
-u.xp+=amount;
-if(u.xp>=100){
+
+let u = DB[currentUser];
+u.xp += amount;
+
+if(u.xp >= 100){
 u.level++;
-u.xp=0;
-u.coin+=50;
-}
-save();
-update();
+u.xp = u.xp - 100;
+u.coin += 50;
 }
 
+updateUI();
+}
+
+/* ===== DAILY SYSTEM ===== */
 function daily(){
-let u=users[current];
-let now=Date.now();
-if(now-u.lastDaily<86400000)return alert("Zaten aldın");
-u.lastDaily=now;
-u.coin+=20+u.bonus;
+
+let u = DB[currentUser];
+let now = Date.now();
+
+if(now - u.lastDaily < 86400000){
+alert("Günlük ödül alındı!");
+return;
+}
+
+u.lastDaily = now;
 u.streak++;
-addXP(10);
-save();
-update();
-}
-
-function vote(){
-users[current].coin+=10+users[current].bonus;
-addXP(5);
-save();
-update();
-}
-
-function buyRank(r,p,b){
-let u=users[current];
-if(u.coin<p)return alert("Yetersiz");
-u.coin-=p;
-u.rank=r;
-u.bonus=b;
-save();
-update();
-}
-
-function openCase(){
-let u=users[current];
-if(u.coin<40)return alert("Yetersiz");
-u.coin-=40;
-let reward=[20,50,100,200];
-let win=reward[Math.floor(Math.random()*reward.length)];
-u.coin+=win;
-document.getElementById("caseResult").innerText="Kazandın: "+win;
+u.coin += 20 + u.bonus;
 addXP(15);
-save();
-update();
+
 }
 
+/* ===== VOTE SYSTEM ===== */
+function vote(){
+let u = DB[currentUser];
+u.coin += 10 + u.bonus;
+addXP(10);
+}
+
+/* ===== RANK SYSTEM ===== */
+function buyRank(rank, price, bonus){
+
+let u = DB[currentUser];
+
+if(u.coin < price){
+alert("Yetersiz coin!");
+return;
+}
+
+u.coin -= price;
+u.rank = rank;
+u.bonus = bonus;
+
+updateUI();
+}
+
+/* ===== BATTLE PASS ===== */
 function battlePass(){
 addXP(20);
 }
 
-function transfer(){
-let to=prompt("Nick:");
-let amount=parseInt(prompt("Coin:"));
-if(users[to] && users[current].coin>=amount){
-users[current].coin-=amount;
-users[to].coin+=amount;
-save();
-update();
-}
+/* ===== ONLINE SIMULATION ===== */
+function updateOnlineCount(){
+let count = Object.keys(DB).length +
+Math.floor(Math.random() * 5);
+document.getElementById("onlineCount").innerText = count;
 }
 
-function giveCoin(){
-let n=document.getElementById("giveNick").value;
-let c=parseInt(document.getElementById("giveCoin").value);
-if(users[n]){
-users[n].coin+=c;
-save();
-updateLeaderboard();
-}
-}
-
+/* ===== LEADERBOARD ===== */
 function updateLeaderboard(){
-let sorted=Object.entries(users)
-.sort((a,b)=>b[1].coin-a[1].coin);
-let html="";
-sorted.forEach(u=>{
-html+=u[0]+" - "+u[1].coin+"<br>";
+
+let sorted = Object.entries(DB)
+.sort((a,b) => b[1].coin - a[1].coin);
+
+let html = "";
+
+sorted.slice(0,10).forEach(user => {
+html += `
+<div class="leaderboard-item">
+${user[0]} - ${user[1].coin} Coin
+</div>
+`;
 });
-document.getElementById("leaderboard").innerHTML=html;
-}
 
-function updateOnline(){
-document.getElementById("online").innerText=
-Object.keys(users).length + Math.floor(Math.random()*5);
+document.getElementById("leaderboard").innerHTML = html;
 }
-
-updateOnline();
 
 </script>
+    <script>
 
+/* ===============================
+   NOVARYNMC ULTRA GAME SYSTEMS
+================================= */
+
+/* ===== ANTI MANIPULATION ===== */
+function integrityCheck(){
+let u = DB[currentUser];
+if(u.coin > 999999999){
+alert("Manipülasyon tespit edildi!");
+u.coin = 0;
+}
+if(u.level > 999){
+u.level = 1;
+}
+}
+
+/* ===== MARKET SYSTEM ===== */
+function openMarket(){
+
+let choice = prompt(
+"MARKET:\n1- Sharpness Kit (30 Coin)\n2- God Apple (60 Coin)"
+);
+
+let u = DB[currentUser];
+
+if(choice == "1"){
+if(u.coin < 30) return alert("Yetersiz!");
+u.coin -= 30;
+addXP(10);
+alert("Sharpness Kit alındı!");
+}
+else if(choice == "2"){
+if(u.coin < 60) return alert("Yetersiz!");
+u.coin -= 60;
+addXP(20);
+alert("God Apple alındı!");
+}
+
+updateUI();
+}
+
+/* ===== ANIMATED CASE ===== */
+function openCase(){
+
+let u = DB[currentUser];
+
+if(u.coin < 40){
+alert("Yetersiz coin!");
+return;
+}
+
+u.coin -= 40;
+
+let rewards = [20, 50, 100, 200, 500];
+let rollText = "Kasa dönüyor";
+let dots = 0;
+
+let interval = setInterval(()=>{
+dots++;
+document.getElementById("coin").innerText =
+rollText + ".".repeat(dots%4);
+},200);
+
+setTimeout(()=>{
+clearInterval(interval);
+
+let win = rewards[Math.floor(Math.random()*rewards.length)];
+
+u.coin += win;
+addXP(25);
+
+alert("Kazandın: " + win + " Coin!");
+
+updateUI();
+
+},2000);
+
+}
+
+/* ===== COIN TRANSFER ===== */
+function transfer(){
+
+let target = prompt("Gönderilecek Nick:");
+let amount = parseInt(prompt("Coin miktarı:"));
+
+if(!DB[target]){
+alert("Kullanıcı yok!");
+return;
+}
+
+let u = DB[currentUser];
+
+if(amount <= 0 || u.coin < amount){
+alert("Yetersiz!");
+return;
+}
+
+u.coin -= amount;
+DB[target].coin += amount;
+
+alert("Transfer başarılı!");
+
+updateUI();
+}
+
+/* ===== ADMIN COIN ===== */
+function giveCoin(){
+
+let nick = document.getElementById("giveNick").value;
+let amount = parseInt(document.getElementById("giveAmount").value);
+
+if(currentUser !== "NexLight"){
+alert("Yetkin yok!");
+return;
+}
+
+if(DB[nick]){
+DB[nick].coin += amount;
+alert("Coin verildi!");
+updateUI();
+}
+}
+
+/* ===== BATTLE TIER SYSTEM ===== */
+function updateBattleTier(){
+
+let u = DB[currentUser];
+
+if(u.level >= 5) u.battleTier = 2;
+if(u.level >= 10) u.battleTier = 3;
+if(u.level >= 20) u.battleTier = 4;
+
+}
+
+/* ===== GLOBAL UPDATE LOOP ===== */
+setInterval(()=>{
+if(currentUser){
+integrityCheck();
+updateBattleTier();
+updateOnlineCount();
+saveDB();
+}
+},5000);
+
+</script>
 </body>
 </html>
