@@ -3,209 +3,180 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NovarynMC | Ultimate Panel</title>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
-
+<title>BoxPvP Panel</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Inter',sans-serif;background:#0b0f1a;color:white}
-nav{position:fixed;width:100%;top:0;display:flex;justify-content:space-between;align-items:center;padding:20px 60px;background:rgba(10,15,30,0.9);z-index:1000}
-.logo{font-family:'Orbitron';font-size:26px;font-weight:700;background:linear-gradient(90deg,#00f7ff,#ff00c8);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.nav-right{display:flex;gap:10px;align-items:center}
-button{padding:8px 14px;border:none;border-radius:8px;cursor:pointer;font-weight:600}
-.login{background:#00f7ff;color:black}
-.register{background:#8a2be2;color:white}
-.logout{background:#ff3b3b;color:white;display:none}
-.hero{height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding-top:100px;background:radial-gradient(circle at top,#111a35,#0b0f1a)}
-.hero h1{font-family:'Orbitron';font-size:55px;background:linear-gradient(90deg,#00f7ff,#ff00c8);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.box{margin-top:25px}
-.vip-section{padding:60px 20px;text-align:center;background:#0f1629}
-.vip-container{display:flex;flex-wrap:wrap;justify-content:center;gap:25px}
-.vip-card{background:#121a30;padding:25px;border-radius:18px;width:260px;border:1px solid rgba(255,255,255,0.1);transition:.3s}
-.vip-card:hover{transform:translateY(-8px);box-shadow:0 0 20px rgba(0,247,255,0.5)}
-.vote-btn{position:fixed;right:20px;bottom:20px;background:linear-gradient(90deg,#00f7ff,#ff00c8);padding:15px;border-radius:50px;cursor:pointer}
-.leaderboard{padding:50px;text-align:center}
-.admin-btn{position:fixed;left:20px;bottom:20px;background:#222;padding:10px;border-radius:10px;cursor:pointer;font-size:12px;opacity:.4}
-.admin-btn:hover{opacity:1}
-footer{text-align:center;padding:20px;background:#0b0f1a;opacity:.5}
+body{
+    margin:0;
+    font-family:Arial;
+    background:#111;
+    color:white;
+    text-align:center;
+}
+.container{
+    padding:20px;
+}
+button{
+    padding:10px 20px;
+    margin:5px;
+    border:none;
+    border-radius:5px;
+    cursor:pointer;
+}
+.vip{background:gold;color:black;}
+.lvip{background:deepskyblue;}
+.mvip{background:red;}
+.adminpanel{
+    background:#222;
+    padding:15px;
+    margin-top:20px;
+    display:none;
+}
+input{
+    padding:8px;
+    margin:5px;
+}
+.leaderboard{
+    margin-top:20px;
+    background:#1a1a1a;
+    padding:10px;
+}
 </style>
 </head>
 <body>
 
-<nav>
-<div class="logo">NovarynMC</div>
-<div class="nav-right">
-<span id="welcome"></span>
-<button class="login" onclick="auth('login')">Giriş</button>
-<button class="register" onclick="auth('register')">Kayıt</button>
-<button class="logout" onclick="logout()" id="logoutBtn">Çıkış</button>
-</div>
-</nav>
-
-<div class="hero">
-<h1>Ultimate BoxPvP Panel</h1>
-<div class="box">
-<p>Toplam Oy: <b id="voteCount">0</b></p>
-<p>Coin: <b id="coinDisplay">0</b></p>
-<button onclick="daily()">Daily Al</button>
-</div>
+<div class="container" id="loginDiv">
+<h2>Giriş Yap</h2>
+<input type="text" id="nick" placeholder="Nick">
+<input type="password" id="adminPass" placeholder="Admin Şifre (admin için)">
+<br>
+<button onclick="login()">Giriş</button>
 </div>
 
-<section class="vip-section">
-<h2 style="font-family:'Orbitron';margin-bottom:30px">Üyelik Paketleri</h2>
-<div class="vip-container">
-<div class="vip-card">
-<h3>VIP - 50₺</h3>
-<p>%10 Coin Bonus</p>
-<button onclick="buyRank('VIP')">Al</button>
-</div>
-<div class="vip-card">
-<h3>LVIP - 100₺</h3>
-<p>%20 Coin Bonus</p>
-<button onclick="buyRank('LVIP')">Al</button>
-</div>
-<div class="vip-card">
-<h3>MVIP - 150₺</h3>
-<p>%35 Coin Bonus</p>
-<button onclick="buyRank('MVIP')">Al</button>
-</div>
-</div>
-</section>
+<div class="container" id="panel" style="display:none;">
+<h2 id="welcome"></h2>
+<p>Coin: <span id="coin">0</span></p>
+<p>Rank: <span id="rank">Oyuncu</span></p>
 
-<section class="leaderboard">
-<h2 style="font-family:'Orbitron';margin-bottom:20px">Coin Liderlik</h2>
-<div id="leaderboardList"></div>
-</section>
+<button onclick="vote()">Oy Ver (+10 Coin)</button>
+<button onclick="daily()">Günlük Ödül (+20 Coin)</button>
 
-<div class="vote-btn" onclick="vote()">Oy Ver</div>
-<div class="admin-btn" onclick="adminPanel()">Admin</div>
+<h3>VIP Satın Al</h3>
+<button class="vip" onclick="buyRank('VIP',50)">VIP - 50 Coin</button>
+<button class="lvip" onclick="buyRank('LVIP',100)">LVIP - 100 Coin</button>
+<button class="mvip" onclick="buyRank('MVIP',150)">MVIP - 150 Coin</button>
 
-<footer>© 2026 NovarynMC</footer>
+<div class="leaderboard">
+<h3>Liderlik Tablosu</h3>
+<div id="leaderboard"></div>
+</div>
+
+<div class="adminpanel" id="adminPanel">
+<h3>ADMIN PANEL</h3>
+<input type="text" id="giveNick" placeholder="Nick">
+<input type="number" id="giveCoin" placeholder="Coin">
+<button onclick="giveCoin()">Coin Ver</button>
+</div>
+
+</div>
 
 <script>
-let users=JSON.parse(localStorage.getItem("users")||"[]");
-let votes=JSON.parse(localStorage.getItem("votes")||"[]");
+let currentUser = null;
+let users = JSON.parse(localStorage.getItem("users")) || {};
 
-if(!users.find(u=>u.nick==="admin")){
-users.push({nick:"admin",password:"1234",role:"admin",coin:100});
-localStorage.setItem("users",JSON.stringify(users));
+function save(){
+    localStorage.setItem("users", JSON.stringify(users));
 }
 
-function save(){localStorage.setItem("users",JSON.stringify(users));}
+function login(){
+    let nick = document.getElementById("nick").value;
+    let pass = document.getElementById("adminPass").value;
 
-function auth(type){
-let nick=prompt("Nick:");
-let pass=prompt("Şifre:");
-if(!nick||!pass)return;
+    if(!nick) return alert("Nick gir");
 
-if(type==="register"){
-if(users.find(u=>u.nick.toLowerCase()===nick.toLowerCase()))
-return alert("Nick kayıtlı");
-users.push({nick:nick,password:pass,coin:100});
-save();
-alert("Kayıt başarılı");
-}
+    if(!users[nick]){
+        users[nick] = {
+            coin:100,
+            rank:"Oyuncu",
+            voted:false,
+            lastDaily:0
+        };
+    }
 
-if(type==="login"){
-let user=users.find(u=>u.nick.toLowerCase()===nick.toLowerCase());
-if(!user)return alert("Kullanıcı yok");
-if(user.password!==pass)return alert("Şifre yanlış");
-localStorage.setItem("loggedIn",JSON.stringify(user));
-}
-updateUI();
-}
+    currentUser = nick;
+    save();
 
-function logout(){
-localStorage.removeItem("loggedIn");
-updateUI();
+    document.getElementById("loginDiv").style.display="none";
+    document.getElementById("panel").style.display="block";
+    document.getElementById("welcome").innerText="Hoşgeldin "+nick;
+
+    if(nick==="NexLight" && pass==="sunucusifresi123"){
+        document.getElementById("adminPanel").style.display="block";
+    }
+
+    update();
 }
 
-function updateUI(){
-let user=JSON.parse(localStorage.getItem("loggedIn")||"null");
-document.getElementById("voteCount").innerText=votes.length;
-if(user){
-document.getElementById("welcome").innerText="Hoşgeldin "+user.nick+(user.rank?" ["+user.rank+"]":"");
-document.getElementById("coinDisplay").innerText=user.coin||0;
-document.querySelector(".login").style.display="none";
-document.querySelector(".register").style.display="none";
-document.getElementById("logoutBtn").style.display="inline-block";
-}else{
-document.getElementById("welcome").innerText="";
-document.getElementById("coinDisplay").innerText="0";
-document.querySelector(".login").style.display="inline-block";
-document.querySelector(".register").style.display="inline-block";
-document.getElementById("logoutBtn").style.display="none";
+function update(){
+    document.getElementById("coin").innerText=users[currentUser].coin;
+    document.getElementById("rank").innerText=users[currentUser].rank;
+    updateLeaderboard();
 }
-updateLeaderboard();
-}
-updateUI();
 
 function vote(){
-let user=JSON.parse(localStorage.getItem("loggedIn")||"null");
-if(!user)return alert("Giriş yap");
-if(votes.find(v=>v===user.nick))return alert("Zaten oy verdin");
-votes.push(user.nick);
-localStorage.setItem("votes",JSON.stringify(votes));
-user.coin+=10;
-updateUser(user);
-alert("Oy verdin +10 coin");
-updateUI();
+    if(users[currentUser].voted){
+        alert("Zaten oy verdin!");
+        return;
+    }
+    users[currentUser].coin+=10;
+    users[currentUser].voted=true;
+    save();
+    update();
 }
 
 function daily(){
-let user=JSON.parse(localStorage.getItem("loggedIn")||"null");
-if(!user)return alert("Giriş yap");
-let now=Date.now();
-if(user.lastDaily && now-user.lastDaily<86400000)
-return alert("24 saat dolmadı");
-let bonus=20;
-if(user.rank==="VIP")bonus*=1.1;
-if(user.rank==="LVIP")bonus*=1.2;
-if(user.rank==="MVIP")bonus*=1.35;
-user.coin+=Math.floor(bonus);
-user.lastDaily=now;
-updateUser(user);
-alert("Daily alındı");
-updateUI();
+    let now=Date.now();
+    if(now-users[currentUser].lastDaily<86400000){
+        alert("Günlük aldın!");
+        return;
+    }
+    users[currentUser].coin+=20;
+    users[currentUser].lastDaily=now;
+    save();
+    update();
 }
 
-function buyRank(rank){
-let user=JSON.parse(localStorage.getItem("loggedIn")||"null");
-if(!user)return alert("Giriş yap");
-user.rank=rank;
-updateUser(user);
-alert(rank+" aktif!");
-updateUI();
+function buyRank(rank,price){
+    if(users[currentUser].coin<price){
+        alert("Yetersiz coin!");
+        return;
+    }
+    users[currentUser].coin-=price;
+    users[currentUser].rank=rank;
+    save();
+    update();
 }
 
-function updateUser(user){
-let index=users.findIndex(u=>u.nick===user.nick);
-users[index]=user;
-save();
-localStorage.setItem("loggedIn",JSON.stringify(user));
+function giveCoin(){
+    let nick=document.getElementById("giveNick").value;
+    let coin=parseInt(document.getElementById("giveCoin").value);
+    if(users[nick]){
+        users[nick].coin+=coin;
+        save();
+        updateLeaderboard();
+        alert("Coin verildi!");
+    }
 }
 
 function updateLeaderboard(){
-let sorted=[...users].sort((a,b)=>(b.coin||0)-(a.coin||0)).slice(0,5);
-let html="";
-sorted.forEach(u=>{
-html+=`<p>${u.nick} - ${u.coin||0} coin</p>`;
-});
-document.getElementById("leaderboardList").innerHTML=html;
-}
+    let sorted = Object.entries(users)
+        .sort((a,b)=>b[1].coin-a[1].coin);
 
-function adminPanel(){
-let user=JSON.parse(localStorage.getItem("loggedIn")||"null");
-if(!user||user.nick!=="admin")return alert("Yetki yok");
-let list=users.map(u=>u.nick+" | "+(u.coin||0)+" coin | "+(u.rank||"Yok")).join("\n");
-let give=prompt("Coin ver (nick,coin):");
-if(give){
-let parts=give.split(",");
-let target=users.find(u=>u.nick===parts[0]);
-if(target){target.coin+=parseInt(parts[1]);save();}
-}
-alert(list);
-updateUI();
+    let html="";
+    sorted.forEach(u=>{
+        html+=u[0]+" - "+u[1].coin+" coin<br>";
+    });
+
+    document.getElementById("leaderboard").innerHTML=html;
 }
 </script>
 
