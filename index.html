@@ -1,113 +1,102 @@
-<!DOCTYPE html>
-<html lang="tr">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NovarynMC</title>
-
-<style>
-body{
-margin:0;
-font-family:Arial;
-background:#0f172a;
-color:white;
-text-align:center;
-}
-
-nav{
-display:flex;
-justify-content:space-between;
-padding:20px 40px;
-background:#111827;
-}
-
-h1{
-margin-top:60px;
-}
-
-.box{
-background:#1f2937;
-max-width:400px;
-margin:40px auto;
-padding:25px;
-border-radius:12px;
-}
-
-input{
-width:100%;
-padding:10px;
-margin:10px 0;
-border:none;
-border-radius:6px;
-}
-
-button{
-padding:10px 18px;
-border:none;
-border-radius:6px;
-background:#00eaff;
-cursor:pointer;
-font-weight:bold;
-}
-
-button:hover{
-opacity:0.8;
-}
-</style>
-</head>
-<body>
-
-<nav>
-<div><b>NovarynMC</b></div>
-<div>BoxPvP</div>
-</nav>
-
-<h1>Oy Ver & Ödül Al</h1>
-
-<div class="box">
-<p>Minecraft Nickini Yaz</p>
-<input type="text" id="mcname" placeholder="Nick">
-<button onclick="vote()">Oy Ver</button>
-<p id="voteMsg"></p>
-<p>Toplam Oy: <span id="voteCount">0</span></p>
-</div>
-
 <script>
 
-let votes = JSON.parse(localStorage.getItem("votes") || "[]");
-
-function vote(){
-
-let mcname = document.getElementById("mcname").value.trim();
-let msg = document.getElementById("voteMsg");
-
-if(mcname === ""){
-msg.innerText = "Nick gir!";
-return;
+// ====== BASİT SHA256 ŞİFRELEME ======
+async function hash(text){
+const encoder = new TextEncoder();
+const data = encoder.encode(text);
+const hashBuffer = await crypto.subtle.digest("SHA-256", data);
+const hashArray = Array.from(new Uint8Array(hashBuffer));
+return hashArray.map(b => b.toString(16).padStart(2,"0")).join("");
 }
 
-// Aynı nick tekrar oy veremesin
-if(votes.find(v => v.name.toLowerCase() === mcname.toLowerCase())){
-msg.innerText = "Bu nick zaten oy vermiş!";
-return;
+// ====== DATABASE ======
+let users = JSON.parse(localStorage.getItem("users") || "[]");
+
+// ====== REGISTER ======
+async function register(){
+
+let nick = prompt("Minecraft Nick:");
+let pass = prompt("Şifre:");
+
+if(!nick || !pass) return alert("Boş bırakılamaz");
+
+if(users.find(u => u.nick.toLowerCase() === nick.toLowerCase())){
+return alert("Bu nick zaten kayıtlı!");
 }
 
-votes.push({
-name: mcname,
-date: new Date()
+let hashed = await hash(pass);
+
+users.push({
+nick: nick,
+password: hashed,
+role: "user"
 });
 
-localStorage.setItem("votes", JSON.stringify(votes));
-
-document.getElementById("voteCount").innerText = votes.length;
-msg.innerText = "Oy kaydedildi!";
+localStorage.setItem("users", JSON.stringify(users));
+alert("Kayıt başarılı!");
 }
 
-window.onload = function(){
-document.getElementById("voteCount").innerText = votes.length;
+// ====== LOGIN ======
+async function login(){
+
+let nick = prompt("Nick:");
+let pass = prompt("Şifre:");
+
+let user = users.find(u => u.nick.toLowerCase() === nick.toLowerCase());
+if(!user) return alert("Kullanıcı yok!");
+
+let hashed = await hash(pass);
+
+if(user.password !== hashed){
+return alert("Şifre yanlış!");
+}
+
+localStorage.setItem("loggedIn", JSON.stringify(user));
+alert("Giriş başarılı!");
+checkLogin();
+}
+
+// ====== ADMIN PANEL ======
+function adminPanel(){
+
+let user = JSON.parse(localStorage.getItem("loggedIn") || "null");
+
+if(!user || user.role !== "admin"){
+return alert("Yetkin yok!");
+}
+
+let list = users.map(u => u.nick + " (" + u.role + ")").join("\n");
+alert("Kayıtlı Kullanıcılar:\n\n" + list);
+}
+
+// ====== LOGOUT ======
+function logout(){
+localStorage.removeItem("loggedIn");
+checkLogin();
+}
+
+// ====== LOGIN STATE ======
+function checkLogin(){
+let user = JSON.parse(localStorage.getItem("loggedIn") || "null");
+
+if(user){
+document.getElementById("welcome").innerText = "Hoşgeldin " + user.nick;
+document.getElementById("welcome").style.display = "block";
+}else{
+document.getElementById("welcome").style.display = "none";
+}
+}
+
+checkLogin();
+
+// ====== İLK ADMIN OLUŞTUR ======
+if(!users.find(u => u.role === "admin")){
+users.push({
+nick:"admin",
+password:"240be518fabd2724ddb6f04eeb8e5a03", // şifre: 1234 (hash)
+role:"admin"
+});
+localStorage.setItem("users", JSON.stringify(users));
 }
 
 </script>
-
-</body>
-</html>
