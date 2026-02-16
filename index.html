@@ -9,7 +9,7 @@
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Inter',sans-serif;background:#0b0f1a;color:white;overflow-x:hidden}
+body{font-family:'Inter',sans-serif;background:#0b0f1a;color:white}
 
 /* NAV */
 nav{
@@ -85,10 +85,7 @@ transform:scale(1.07);
 box-shadow:0 0 40px rgba(0,247,255,0.5)
 }
 
-.stats{
-margin-top:20px;
-font-size:18px
-}
+.stats{margin-top:20px;font-size:18px}
 
 /* MODAL */
 .modal{
@@ -135,12 +132,60 @@ background:linear-gradient(90deg,#00f7ff,#8a2be2);
 color:white;
 font-weight:600;
 cursor:pointer;
+}
+
+/* VIP SECTION */
+.vip-section{
+padding:80px 20px;
+background:#0f1629;
+text-align:center
+}
+
+.vip-container{
+display:flex;
+flex-wrap:wrap;
+justify-content:center;
+gap:30px
+}
+
+.vip-card{
+background:#121a30;
+padding:30px;
+border-radius:20px;
+width:280px;
+border:1px solid rgba(255,255,255,0.1);
 transition:0.3s
 }
 
-.modal-content button:hover{
-transform:scale(1.05);
+.vip-card:hover{
+transform:translateY(-10px);
 box-shadow:0 0 25px rgba(0,247,255,0.5)
+}
+
+.vip-card h3{
+font-family:'Orbitron';
+font-size:28px;
+margin-bottom:10px
+}
+
+.vip-card ul{
+list-style:none;
+margin:20px 0;
+text-align:left;
+font-size:14px
+}
+
+.vip-card li{margin-bottom:8px}
+
+.vip-card button{
+width:100%;
+padding:12px;
+border:none;
+border-radius:10px;
+background:linear-gradient(90deg,#00f7ff,#8a2be2);
+color:white;
+font-weight:600;
+cursor:pointer
 }
 
 /* VOTE BUTTON */
@@ -153,7 +198,6 @@ padding:15px 20px;
 border-radius:50px;
 font-weight:600;
 cursor:pointer;
-z-index:1500;
 box-shadow:0 0 20px rgba(0,247,255,0.6)
 }
 
@@ -188,27 +232,50 @@ Toplam Oy: <b id="voteCount">0</b>
 </div>
 </div>
 
+<section class="vip-section">
+<h2 style="font-family:'Orbitron';font-size:40px;margin-bottom:40px">Üyelik Paketleri</h2>
+
+<div class="vip-container">
+
+<div class="vip-card">
+<h3>VIP</h3>
+<p>50₺</p>
+<ul>
+<li>/kit vip</li>
+<li>%10 Coin Bonus</li>
+<li>VIP Tag</li>
+</ul>
+<button onclick="buyRank('VIP')">Satın Al</button>
+</div>
+
+<div class="vip-card">
+<h3>LVIP</h3>
+<p>100₺</p>
+<ul>
+<li>/kit lvip</li>
+<li>%20 Coin Bonus</li>
+<li>LVIP Tag</li>
+<li>Özel Warp</li>
+</ul>
+<button onclick="buyRank('LVIP')">Satın Al</button>
+</div>
+
+<div class="vip-card">
+<h3>MVIP</h3>
+<p>150₺</p>
+<ul>
+<li>/kit mvip</li>
+<li>%35 Coin Bonus</li>
+<li>MVIP Tag</li>
+<li>Özel Arena</li>
+</ul>
+<button onclick="buyRank('MVIP')">Satın Al</button>
+</div>
+
+</div>
+</section>
+
 <div class="vote-btn" onclick="vote()">Oy Ver</div>
-
-<!-- LOGIN -->
-<div class="modal" id="loginModal">
-<div class="modal-content">
-<h2>Giriş</h2>
-<input type="text" id="loginNick" placeholder="Nick">
-<input type="password" id="loginPass" placeholder="Şifre">
-<button onclick="login()">Giriş Yap</button>
-</div>
-</div>
-
-<!-- REGISTER -->
-<div class="modal" id="registerModal">
-<div class="modal-content">
-<h2>Kayıt</h2>
-<input type="text" id="regNick" placeholder="Nick">
-<input type="password" id="regPass" placeholder="Şifre">
-<button onclick="register()">Kayıt Ol</button>
-</div>
-</div>
 
 <footer>© 2026 NovarynMC</footer>
 
@@ -216,40 +283,38 @@ Toplam Oy: <b id="voteCount">0</b>
 let users = JSON.parse(localStorage.getItem("users")||"[]");
 let votes = JSON.parse(localStorage.getItem("votes")||"[]");
 
+if(!users.find(u=>u.nick==="admin")){
+users.push({nick:"admin",password:"1234",role:"admin"});
+localStorage.setItem("users",JSON.stringify(users));
+}
+
 function copyIP(){
 navigator.clipboard.writeText("NovarynMC.aternos.me:12212");
 alert("IP Kopyalandı!");
 }
 
 function openModal(type){
-document.getElementById(type+"Modal").style.display="flex";
+let nick=prompt("Nick:");
+let pass=prompt("Şifre:");
+if(type==="register") register(nick,pass);
+if(type==="login") login(nick,pass);
 }
 
-window.onclick=function(e){
-if(e.target.classList.contains("modal")) e.target.style.display="none";
-}
-
-function register(){
-let nick=document.getElementById("regNick").value.trim();
-let pass=document.getElementById("regPass").value.trim();
-if(!nick||!pass)return alert("Boş bırakılamaz");
+function register(nick,pass){
+if(!nick||!pass) return alert("Boş bırakılamaz");
 if(users.find(u=>u.nick.toLowerCase()===nick.toLowerCase()))
 return alert("Bu nick zaten kayıtlı");
 users.push({nick:nick,password:pass});
 localStorage.setItem("users",JSON.stringify(users));
 alert("Kayıt başarılı");
-document.getElementById("registerModal").style.display="none";
 }
 
-function login(){
-let nick=document.getElementById("loginNick").value.trim();
-let pass=document.getElementById("loginPass").value.trim();
+function login(nick,pass){
 let user=users.find(u=>u.nick.toLowerCase()===nick.toLowerCase());
-if(!user)return alert("Kullanıcı yok");
-if(user.password!==pass)return alert("Şifre yanlış");
+if(!user) return alert("Kullanıcı yok");
+if(user.password!==pass) return alert("Şifre yanlış");
 localStorage.setItem("loggedIn",JSON.stringify(user));
 checkLogin();
-document.getElementById("loginModal").style.display="none";
 }
 
 function logout(){
@@ -260,7 +325,8 @@ checkLogin();
 function checkLogin(){
 let user=JSON.parse(localStorage.getItem("loggedIn")||"null");
 if(user){
-document.getElementById("welcome").innerText="Hoşgeldin "+user.nick;
+document.getElementById("welcome").innerText=
+"Hoşgeldin "+user.nick+(user.rank?" ["+user.rank+"]":"");
 document.getElementById("welcome").style.display="block";
 document.querySelector(".login").style.display="none";
 document.querySelector(".register").style.display="none";
@@ -276,7 +342,7 @@ checkLogin();
 
 function vote(){
 let user=JSON.parse(localStorage.getItem("loggedIn")||"null");
-if(!user)return alert("Önce giriş yapmalısın");
+if(!user) return alert("Önce giriş yap");
 if(votes.find(v=>v.nick===user.nick))
 return alert("Zaten oy verdin");
 votes.push({nick:user.nick});
@@ -285,6 +351,20 @@ document.getElementById("voteCount").innerText=votes.length;
 alert("Oy verildi!");
 }
 document.getElementById("voteCount").innerText=votes.length;
+
+function buyRank(rank){
+let user=JSON.parse(localStorage.getItem("loggedIn")||"null");
+if(!user) return alert("Önce giriş yap");
+user.rank=rank;
+localStorage.setItem("loggedIn",JSON.stringify(user));
+let index=users.findIndex(u=>u.nick===user.nick);
+if(index!==-1){
+users[index].rank=rank;
+localStorage.setItem("users",JSON.stringify(users));
+}
+alert(rank+" hesabına tanımlandı!");
+checkLogin();
+}
 </script>
 
 </body>
