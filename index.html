@@ -1,169 +1,42 @@
-<!DOCTYPE html>
-<html lang="tr">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NovarynMC | BoxPvP</title>
-
-<script src="https://accounts.google.com/gsi/client" async defer></script>
-
-<style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:Arial;background:#0b0f1a;color:white;text-align:center}
-nav{display:flex;justify-content:space-between;padding:20px;background:#111a35}
-.logo{font-size:22px;font-weight:bold}
-button{padding:10px 18px;border:none;border-radius:8px;cursor:pointer;margin-left:10px}
-.login{background:#00f7ff;color:black}
-.logout{background:#ff3b3b;color:white}
-.hero{padding:80px 20px}
-.vote-box,.admin-panel{
-margin:30px auto;
-max-width:400px;
-background:#111a35;
-padding:20px;
-border-radius:12px;
-}
-input{
-width:100%;
-padding:10px;
-margin-top:10px;
-border:none;
-border-radius:6px;
-}
-.admin-panel{display:none}
-</style>
-</head>
-<body>
-
-<nav>
-<div class="logo">NovarynMC</div>
-<div>
-<span id="welcome"></span>
-<button class="login" id="loginBtn">Google Giriş</button>
-<button class="logout" id="logoutBtn" style="display:none">Çıkış</button>
-</div>
-</nav>
-
-<div class="hero">
-<h1>NovarynMC BoxPvP</h1>
-</div>
-
-<div class="vote-box">
-<h2>Oy Ver & Ödül Al</h2>
-<p>Vote sitelerinden oy ver, sonra nickini yaz.</p>
-<input type="text" id="mcname" placeholder="Minecraft Nick">
-<br>
-<button onclick="vote()">Oy Verdım</button>
-<p id="voteMsg"></p>
-<p>Toplam Oy: <span id="voteCount">0</span></p>
-</div>
-
-<div class="admin-panel" id="adminPanel">
-<h2>Admin Panel</h2>
-<p>Toplam Kullanıcı: <span id="totalUsers"></span></p>
-<button onclick="resetVotes()">Oyları Sıfırla</button>
-</div>
-
 <script>
-let users = JSON.parse(localStorage.getItem("users") || "[]");
-let currentUser = null;
-
-window.onload = function(){
-  google.accounts.id.initialize({
-    client_id: "BURAYA_GOOGLE_CLIENT_ID",
-    callback: handleCredentialResponse
-  });
-
-  document.getElementById("loginBtn").onclick = () => {
-    google.accounts.id.prompt();
-  };
-
-  checkLogin();
-};
-
-function handleCredentialResponse(response){
-  const data = parseJwt(response.credential);
-
-  currentUser = users.find(u=>u.email===data.email);
-
-  if(!currentUser){
-    currentUser = {
-      name:data.name,
-      email:data.email,
-      votes:0,
-      role:"user"
-    };
-    users.push(currentUser);
-  }
-
-  localStorage.setItem("users", JSON.stringify(users));
-  localStorage.setItem("currentUser", JSON.stringify(currentUser));
-
-  checkLogin();
-}
-
-function parseJwt(token){
-  let base64Url = token.split('.')[1];
-  let base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-  let jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c){
-    return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-  }).join(''));
-  return JSON.parse(jsonPayload);
-}
-
-function checkLogin(){
-  currentUser = JSON.parse(localStorage.getItem("currentUser"));
-
-  if(currentUser){
-    document.getElementById("welcome").innerText="Hoşgeldin "+currentUser.name;
-    document.getElementById("loginBtn").style.display="none";
-    document.getElementById("logoutBtn").style.display="inline-block";
-
-    document.getElementById("voteCount").innerText=currentUser.votes;
-
-    if(currentUser.email==="SENINMAIL@gmail.com"){
-      currentUser.role="admin";
-      document.getElementById("adminPanel").style.display="block";
-      document.getElementById("totalUsers").innerText=users.length;
-    }
-  }
-}
-
-document.getElementById("logoutBtn").onclick=function(){
-  localStorage.removeItem("currentUser");
-  location.reload();
-};
+let votes = JSON.parse(localStorage.getItem("votes") || "[]");
 
 function vote(){
-  if(!currentUser){
-    document.getElementById("voteMsg").innerText="Önce giriş yap!";
+  let mcname = document.getElementById("mcname").value.trim();
+  let msg = document.getElementById("voteMsg");
+
+  if(mcname === ""){
+    msg.innerText = "Nick gir!";
     return;
   }
 
-  let mcname=document.getElementById("mcname").value;
-  if(mcname===""){
-    document.getElementById("voteMsg").innerText="Nick gir!";
+  // Aynı nick daha önce kullanılmış mı?
+  if(votes.find(v => v.name.toLowerCase() === mcname.toLowerCase())){
+    msg.innerText = "Bu nick zaten oy vermiş!";
     return;
   }
 
-  currentUser.votes++;
-  users = users.map(u=>u.email===currentUser.email?currentUser:u);
+  // Basit IP kontrol (tarayıcı izi)
+  let fingerprint = navigator.userAgent;
 
-  localStorage.setItem("users", JSON.stringify(users));
-  localStorage.setItem("currentUser", JSON.stringify(currentUser));
+  if(votes.find(v => v.fingerprint === fingerprint)){
+    msg.innerText = "Bu cihazdan zaten oy verilmiş!";
+    return;
+  }
 
-  document.getElementById("voteCount").innerText=currentUser.votes;
-  document.getElementById("voteMsg").innerText=
-  "Oy kaydedildi! Şimdi Minecraft vote sitesinden oy ver. Sunucu otomatik ödül verecek.";
+  votes.push({
+    name: mcname,
+    fingerprint: fingerprint,
+    date: new Date()
+  });
+
+  localStorage.setItem("votes", JSON.stringify(votes));
+
+  document.getElementById("voteCount").innerText = votes.length;
+  msg.innerText = "Oy kaydedildi! Vote sitesinden oy ver.";
 }
 
-function resetVotes(){
-  users.forEach(u=>u.votes=0);
-  localStorage.setItem("users", JSON.stringify(users));
-  alert("Oylar sıfırlandı");
-  location.reload();
+window.onload = function(){
+  document.getElementById("voteCount").innerText = votes.length;
 }
 </script>
-
-</body>
-</html>
